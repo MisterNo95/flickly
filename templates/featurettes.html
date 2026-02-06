@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reel Review House • Featurettes</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body>
+  <header class="hero hero-inner">
+    <nav class="nav">
+      <div class="logo">Reel Review House</div>
+      <div class="nav-links">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('reviews') }}">All Reviews</a>
+        <a href="{{ url_for('featurettes') }}">Featurettes</a>
+        <a href="{{ url_for('opinion') }}">Opinion</a>
+        <a href="{{ url_for('tags') }}">Tags</a>
+        <a href="{{ url_for('admin') }}">Admin</a>
+      </div>
+    </nav>
+    <div class="hero-content">
+      <p class="tagline">Featurettes</p>
+      <h1>Long-form cinema essays.</h1>
+      <p class="subtitle">Deep dives and thematic explorations, curated like a festival program.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="section featurettes">
+      <div class="section-title">
+        <h2>Latest featurettes</h2>
+        <p>Tap any featurette to read the full piece.</p>
+      </div>
+      <div class="featurette-grid">
+        {% for featurette in featurettes %}
+        <a class="featurette-card" href="{{ url_for('featurette_detail', featurette_id=featurette['id']) }}">
+          <div class="featurette-image">
+            <img src="{{ featurette['image_url'] }}" alt="Artwork for {{ featurette['title'] }}" />
+          </div>
+          <h3>{{ featurette['title'] }}</h3>
+          <div class="tag-row">
+            {% for tag in featurette['tags'].split(',') %}
+            <span>{{ tag.strip() }}</span>
+            {% endfor %}
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Reel Review House — featurettes, essays, and deep dives.</p>
+  </footer>
+</body>
+</html>

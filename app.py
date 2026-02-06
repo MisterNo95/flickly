@@ -45,6 +45,18 @@ def init_db() -> None:
     )
     connection.execute(
         """
+        CREATE TABLE IF NOT EXISTS featurettes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            image_url TEXT NOT NULL,
+            body TEXT NOT NULL,
+            tags TEXT NOT NULL,
+            created_at TEXT NOT NULL
+        )
+        """
+    )
+    connection.execute(
+        """
         CREATE TABLE IF NOT EXISTS updates (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             content TEXT NOT NULL,
@@ -58,6 +70,11 @@ def init_db() -> None:
     updates_count = connection.execute("SELECT COUNT(*) FROM updates").fetchone()[0]
     if updates_count == 0:
         seed_updates(connection)
+    featurettes_count = connection.execute(
+        "SELECT COUNT(*) FROM featurettes"
+    ).fetchone()[0]
+    if featurettes_count == 0:
+        seed_featurettes(connection)
     connection.commit()
     connection.close()
 
@@ -172,6 +189,22 @@ def seed_updates(connection: sqlite3.Connection) -> None:
     )
 
 
+def seed_featurettes(connection: sqlite3.Connection) -> None:
+    sample_featurettes = [
+        {
+            "title": "The art of silence in cinema",
+            "image_url": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=900&q=80",
+            "body": "## The hush before the score\nSilence gives a scene room to breathe. When directors trust stillness, every footstep and breath becomes part of the story.\n\n## Why it matters\nWe remember the quiet moments because they let the audience step inside the frame.",
+            "tags": "Analysis, Sound, Craft",
+            "created_at": datetime.utcnow().isoformat(),
+        }
+    ]
+    connection.executemany(
+        "INSERT INTO featurettes (title, image_url, body, tags, created_at) VALUES (:title, :image_url, :body, :tags, :created_at)",
+        sample_featurettes,
+    )
+
+
 def fetch_reviews() -> list[sqlite3.Row]:
     connection = get_connection()
     reviews = connection.execute(
@@ -191,12 +224,29 @@ def fetch_updates(limit: int = 3) -> list[sqlite3.Row]:
     return updates
 
 
+def fetch_featurettes() -> list[sqlite3.Row]:
+    connection = get_connection()
+    featurettes = connection.execute(
+        "SELECT * FROM featurettes ORDER BY created_at DESC"
+    ).fetchall()
+    connection.close()
+    return featurettes
+
+
 def format_review_body(text: str) -> Markup:
     escaped = html.escape(text)
     escaped = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", escaped)
     escaped = re.sub(r"\*(.+?)\*", r"<em>\1</em>", escaped)
     escaped = re.sub(r"__(.+?)__", r"<u>\1</u>", escaped)
-    return Markup(escaped.replace("\n", "<br>"))
+    lines = []
+    for line in escaped.splitlines():
+        if line.startswith("## "):
+            lines.append(f"<span class=\"review-heading\">{line[3:]}</span>")
+        elif line.startswith("### "):
+            lines.append(f"<span class=\"review-heading small\">{line[4:]}</span>")
+        else:
+            lines.append(line)
+    return Markup("<br>".join(lines))
 
 
 @app.route("/")
@@ -207,12 +257,34 @@ def home() -> str:
         reviews=reviews[:8],
         reviews_count=len(reviews),
         updates=fetch_updates(),
+        featurettes=fetch_featurettes()[:3],
     )
 
 
 @app.route("/reviews")
 def reviews() -> str:
     return render_template("reviews.html", reviews=fetch_reviews())
+
+
+@app.route("/featurettes")
+def featurettes() -> str:
+    return render_template("featurettes.html", featurettes=fetch_featurettes())
+
+
+@app.route("/featurettes/<int:featurette_id>")
+def featurette_detail(featurette_id: int) -> str:
+    connection = get_connection()
+    featurette = connection.execute(
+        "SELECT * FROM featurettes WHERE id = ?", (featurette_id,)
+    ).fetchone()
+    connection.close()
+    if featurette is None:
+        abort(404)
+    return render_template(
+        "featurette.html",
+        featurette=featurette,
+        formatted_body=format_review_body(featurette["body"]),
+    )
 
 
 @app.route("/reviews/<int:review_id>")
@@ -269,6 +341,37 @@ def admin() -> str:
                 connection.commit()
                 connection.close()
             return redirect(url_for("home"))
+        if request.form.get("form_type") == "featurette":
+            payload = {
+                "title": request.form["title"].strip(),
+                "image_url": request.form["image_url"].strip(),
+                "body": request.form["body"].strip(),
+                "tags": request.form["tags"].replace("/", ",").strip(),
+                "created_at": datetime.utcnow().isoformat(),
+            }
+            connection = get_connection()
+            cursor = connection.execute(
+                """
+                INSERT INTO featurettes (
+                    title,
+                    image_url,
+                    body,
+                    tags,
+                    created_at
+                ) VALUES (
+                    :title,
+                    :image_url,
+                    :body,
+                    :tags,
+                    :created_at
+                )
+                """,
+                payload,
+            )
+            connection.commit()
+            featurette_id = cursor.lastrowid
+            connection.close()
+            return redirect(url_for("featurette_detail", featurette_id=featurette_id))
         payload = {
             "title": request.form["title"].strip(),
             "director": request.form["director"].strip(),

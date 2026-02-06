@@ -13,6 +13,7 @@
       <div class="nav-links">
         <a href="{{ url_for('home') }}">Home</a>
         <a href="{{ url_for('reviews') }}">All Reviews</a>
+        <a href="{{ url_for('featurettes') }}">Featurettes</a>
         <a href="{{ url_for('opinion') }}">Opinion</a>
         <a href="{{ url_for('tags') }}">Tags</a>
         <a href="{{ url_for('admin') }}">Admin</a>
@@ -90,6 +91,34 @@
         </div>
 
         <button class="cta" type="submit">Publish review</button>
+      </form>
+
+      <div class="admin-divider"></div>
+
+      <form class="review-form" method="post" action="{{ url_for('admin') }}">
+        <input type="hidden" name="form_type" value="featurette" />
+        <h3>Featurette</h3>
+        <p class="form-hint">Long-form essays without director or runtime details.</p>
+        <div class="form-grid">
+          <label>
+            Title
+            <input type="text" name="title" required />
+          </label>
+          <label>
+            Image URL
+            <input type="url" name="image_url" required />
+          </label>
+          <label>
+            Tags (comma-separated)
+            <input type="text" name="tags" placeholder="Analysis, Themes, Lighting" required />
+          </label>
+        </div>
+        <label class="full-width">
+          Featurette body
+          <textarea name="body" rows="6" required></textarea>
+          <span class="form-hint">Use line breaks freely. Markdown: **bold**, *italic*, __underline__, ## heading.</span>
+        </label>
+        <button class="cta" type="submit">Publish featurette</button>
       </form>
 
       <div class="admin-divider"></div>

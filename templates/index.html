@@ -15,6 +15,7 @@
         <a href="{{ url_for('home') }}#features">Features</a>
         <a href="{{ url_for('home') }}#now-showing">Now Showing</a>
         <a href="{{ url_for('reviews') }}">All Reviews</a>
+        <a href="{{ url_for('featurettes') }}">Featurettes</a>
         <a href="{{ url_for('opinion') }}">Opinion</a>
         <a href="{{ url_for('tags') }}">Tags</a>
         <a href="{{ url_for('admin') }}">Admin</a>
@@ -39,17 +40,17 @@
         <p>Warm velvet tones, classic marquee accents, and film-strip layouts that echo the theatre.</p>
       </div>
       <div class="feature-grid">
-        <a class="feature-card" href="{{ url_for('home') }}#reviews">
-          <h3>Reel-ready verdicts</h3>
-          <p>Short, punchy reviews with a spotlight on direction, sound, and story.</p>
+        <a class="feature-card" href="{{ url_for('featurettes') }}">
+          <h3>Featurettes</h3>
+          <p>Long-form essays and deep dives on cinema craft, themes, and history.</p>
         </a>
         <a class="feature-card" href="{{ url_for('opinion') }}">
           <h3>Spotlight scores</h3>
           <p>Quick ratings inspired by glowing stage lights and opening night applause.</p>
         </a>
-        <a class="feature-card" href="{{ url_for('tags') }}">
-          <h3>Showtime picks</h3>
-          <p>Recommendations that feel like the perfect seat in the house.</p>
+        <a class="feature-card" href="{{ url_for('home') }}#reviews">
+          <h3>Feature reels</h3>
+          <p>Review cards with scores, posters, and full write-ups.</p>
         </a>
       </div>
     </section>

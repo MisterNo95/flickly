@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Reel Review House • Reviews</title>
+  <title>Reel Review House • Featurette</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
 </head>
 <body>
@@ -20,29 +20,23 @@
       </div>
     </nav>
     <div class="hero-content">
-      <p class="tagline">Full-length review pages</p>
-      <h1>The complete reel.</h1>
-      <p class="subtitle">Each review lives on its own spotlight-ready page with structure, imagery, and scene notes.</p>
+      <p class="tagline">Featurette</p>
+      <h1>{{ featurette['title'] }}</h1>
+      <p class="subtitle">A long-form cinema essay.</p>
     </div>
   </header>
 
   <main>
-    <section class="section review-page">
+    <section class="section review-page featurette-page">
       <div class="review-hero">
         <div>
-          <p class="review-label">{{ review['genre'] }} • {{ review['length'] }} min • {{ review['year'] }}</p>
-          <h2>{{ review['title'] }}</h2>
-          <p class="review-byline">Directed by {{ review['director'] }} • Reviewed by Reel Review House</p>
-          <div class="review-score">
-            <span>Score</span>
-            <strong>{{ review['score_overall'] }} / 5</strong>
-          </div>
+          <p class="review-label">Featurette</p>
+          <h2>{{ featurette['title'] }}</h2>
         </div>
-        <img src="{{ review['image_url'] }}" alt="Review art for {{ review['title'] }}" />
+        <img src="{{ featurette['image_url'] }}" alt="Artwork for {{ featurette['title'] }}" />
       </div>
       <div class="review-body">
         <div class="review-section">
-          <h3>{{ review['review_title'] }}</h3>
           <p class="review-text">{{ formatted_body }}</p>
         </div>
       </div>
@@ -50,21 +44,17 @@
         <div>
           <h4>Tags</h4>
           <div class="tag-row">
-            {% for tag in review['tags'].split(',') %}
+            {% for tag in featurette['tags'].split(',') %}
             <span>{{ tag.strip() }}</span>
             {% endfor %}
           </div>
-        </div>
-        <div>
-          <h4>Quick notes</h4>
-          <p>Cinematography: {{ review['score_cinematography'] }}⭐ • Acting: {{ review['score_acting'] }}⭐ • Story: {{ review['score_story'] }}⭐</p>
         </div>
       </div>
     </section>
   </main>
 
   <footer class="footer">
-    <p>Reel Review House — full reviews, one reel at a time.</p>
+    <p>Reel Review House — featurettes, essays, and deep dives.</p>
   </footer>
 </body>
 </html>
