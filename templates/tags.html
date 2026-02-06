@@ -79,27 +79,27 @@
           <h3>Matinee Spotlight</h3>
           <p>Bright, hopeful stories for daytime viewing.</p>
           <div class="tag-row">
-            <span>2024</span>
-            <span>Movie</span>
-            <span>Feel-good</span>
+            <a class="tag-link" href="{{ url_for('tag_filter', tag='2024') }}">2024</a>
+            <a class="tag-link" href="{{ url_for('tag_filter', tag='Movie') }}">Movie</a>
+            <a class="tag-link" href="{{ url_for('tag_filter', tag='Feel-good') }}">Feel-good</a>
           </div>
         </article>
         <article id="prime-time" class="tag-card">
           <h3>Prime Time Thrills</h3>
           <p>Blockbusters, high energy, and big-screen spectacle.</p>
           <div class="tag-row">
-            <span>Series</span>
-            <span>Action</span>
-            <span>USA</span>
+            <a class="tag-link" href="{{ url_for('tag_filter', tag='Series') }}">Series</a>
+            <a class="tag-link" href="{{ url_for('tag_filter', tag='Action') }}">Action</a>
+            <a class="tag-link" href="{{ url_for('tag_filter', tag='USA') }}">USA</a>
           </div>
         </article>
         <article id="after-dark" class="tag-card">
           <h3>After Dark Classics</h3>
           <p>Noir, mystery, and slow-burn cinema.</p>
           <div class="tag-row">
-            <span>Classic</span>
-            <span>Noir</span>
-            <span>France</span>
+            <a class="tag-link" href="{{ url_for('tag_filter', tag='Classic') }}">Classic</a>
+            <a class="tag-link" href="{{ url_for('tag_filter', tag='Noir') }}">Noir</a>
+            <a class="tag-link" href="{{ url_for('tag_filter', tag='France') }}">France</a>
           </div>
         </article>
       </div>

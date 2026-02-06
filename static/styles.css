@@ -597,6 +597,15 @@ a {
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
+.featurette-card .tag-row {
+  gap: 8px;
+}
+
+.featurette-card .tag-row a {
+  font-size: 0.7rem;
+  padding: 4px 10px;
+}
+
 .featurette-card:hover {
   transform: translateY(-6px);
   border-color: rgba(214, 167, 86, 0.4);
