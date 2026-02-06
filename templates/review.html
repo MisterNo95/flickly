@@ -12,7 +12,7 @@
       <div class="logo">Reel Review House</div>
       <div class="nav-links">
         <a href="{{ url_for('home') }}">Home</a>
-        <a href="{{ url_for('home') }}#reviews">Reviews</a>
+        <a href="{{ url_for('reviews') }}">All Reviews</a>
         <a href="{{ url_for('opinion') }}">Opinion</a>
         <a href="{{ url_for('tags') }}">Tags</a>
         <a href="{{ url_for('admin') }}">Admin</a>
@@ -42,7 +42,7 @@
       <div class="review-body">
         <div class="review-section">
           <h3>{{ review['review_title'] }}</h3>
-          <p>{{ review['review_body'] }}</p>
+          <p class="review-text">{{ formatted_body }}</p>
         </div>
       </div>
       <div class="review-meta">

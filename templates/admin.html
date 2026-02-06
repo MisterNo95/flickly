@@ -12,7 +12,7 @@
       <div class="logo">Reel Review House</div>
       <div class="nav-links">
         <a href="{{ url_for('home') }}">Home</a>
-        <a href="{{ url_for('home') }}#reviews">Reviews</a>
+        <a href="{{ url_for('reviews') }}">All Reviews</a>
         <a href="{{ url_for('opinion') }}">Opinion</a>
         <a href="{{ url_for('tags') }}">Tags</a>
         <a href="{{ url_for('admin') }}">Admin</a>
@@ -28,6 +28,7 @@
   <main>
     <section class="section admin">
       <form class="review-form" method="post" action="{{ url_for('admin') }}">
+        <input type="hidden" name="form_type" value="review" />
         <div class="form-grid">
           <label>
             Title
@@ -66,6 +67,7 @@
         <label class="full-width">
           Review body
           <textarea name="review_body" rows="6" required></textarea>
+          <span class="form-hint">Use line breaks freely. Markdown: **bold**, *italic*, __underline__.</span>
         </label>
 
         <div class="form-grid">
@@ -88,6 +90,19 @@
         </div>
 
         <button class="cta" type="submit">Publish review</button>
+      </form>
+
+      <div class="admin-divider"></div>
+
+      <form class="review-form" method="post" action="{{ url_for('admin') }}">
+        <input type="hidden" name="form_type" value="update" />
+        <h3>Lobby updates</h3>
+        <p class="form-hint">Post short, Twitter-style updates for the “Now showing” feed.</p>
+        <label class="full-width">
+          Update text
+          <textarea name="content" rows="4" required></textarea>
+        </label>
+        <button class="cta" type="submit">Publish update</button>
       </form>
     </section>
   </main>

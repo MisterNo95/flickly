@@ -14,7 +14,7 @@
         <a href="{{ url_for('home') }}#reviews">Reviews</a>
         <a href="{{ url_for('home') }}#features">Features</a>
         <a href="{{ url_for('home') }}#now-showing">Now Showing</a>
-        <a href="{{ url_for('home') }}">Review Page</a>
+        <a href="{{ url_for('reviews') }}">All Reviews</a>
         <a href="{{ url_for('opinion') }}">Opinion</a>
         <a href="{{ url_for('tags') }}">Tags</a>
         <a href="{{ url_for('admin') }}">Admin</a>
@@ -63,6 +63,9 @@
         {% if reviews %}
         {% for review in reviews %}
         <a class="reel-card" href="{{ url_for('review_detail', review_id=review['id']) }}">
+          <div class="reel-image">
+            <img src="{{ review['image_url'] }}" alt="Poster for {{ review['title'] }}" />
+          </div>
           <div class="reel-top">
             <span class="rating">{{ review['score_overall'] }}</span>
             <span class="label">{{ review['review_title'] }}</span>
@@ -95,35 +98,25 @@
         </div>
         {% endif %}
       </div>
+      {% if reviews_count > 8 %}
+      <div class="see-more">
+        <a class="cta" href="{{ url_for('reviews') }}">See more reviews</a>
+      </div>
+      {% endif %}
     </section>
 
     <section id="now-showing" class="section now-showing">
       <div class="section-title">
         <h2>Now showing</h2>
-        <p>Fresh screenings lighting up the lobby this week.</p>
+        <p>Quick thoughts and updates—short takes like a theatre lobby feed.</p>
       </div>
-      <div class="showcase">
-        <a class="showtime" href="{{ url_for('tags') }}#matinee">
-          <span class="dot"></span>
-          <div>
-            <h4>Matinee Spotlight</h4>
-            <p>Brighter, feel-good picks for daytime viewing.</p>
-          </div>
-        </a>
-        <a class="showtime" href="{{ url_for('tags') }}#prime-time">
-          <span class="dot"></span>
-          <div>
-            <h4>Prime Time Thrills</h4>
-            <p>High-energy reviews for the blockbuster crowd.</p>
-          </div>
-        </a>
-        <a class="showtime" href="{{ url_for('tags') }}#after-dark">
-          <span class="dot"></span>
-          <div>
-            <h4>After Dark Classics</h4>
-            <p>Slow-burn cinema and timeless noir favorites.</p>
-          </div>
-        </a>
+      <div class="updates-grid">
+        {% for update in updates %}
+        <div class="update-card">
+          <span class="update-label">Lobby note</span>
+          <p>{{ update['content'] }}</p>
+        </div>
+        {% endfor %}
       </div>
     </section>
   </main>

@@ -2,9 +2,12 @@ from __future__ import annotations
 
 import sqlite3
 from datetime import datetime
+import html
+import re
 from pathlib import Path
 
 from flask import Flask, abort, redirect, render_template, request, url_for
+from markupsafe import Markup
 
 DB_PATH = Path("reviews.db")
 
@@ -40,9 +43,21 @@ def init_db() -> None:
         )
         """
     )
+    connection.execute(
+        """
+        CREATE TABLE IF NOT EXISTS updates (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            content TEXT NOT NULL,
+            created_at TEXT NOT NULL
+        )
+        """
+    )
     count = connection.execute("SELECT COUNT(*) FROM reviews").fetchone()[0]
     if count == 0:
         seed_reviews(connection)
+    updates_count = connection.execute("SELECT COUNT(*) FROM updates").fetchone()[0]
+    if updates_count == 0:
+        seed_updates(connection)
     connection.commit()
     connection.close()
 
@@ -136,6 +151,27 @@ def seed_reviews(connection: sqlite3.Connection) -> None:
     )
 
 
+def seed_updates(connection: sqlite3.Connection) -> None:
+    sample_updates = [
+        {
+            "content": "Tonight's watch: a 90s thriller marathon. I'll post quick notes after the credits.",
+            "created_at": datetime.utcnow().isoformat(),
+        },
+        {
+            "content": "Hot take: practical sets still beat CGI when it comes to mood and texture.",
+            "created_at": datetime.utcnow().isoformat(),
+        },
+        {
+            "content": "Festival season is here—send me your hidden gems.",
+            "created_at": datetime.utcnow().isoformat(),
+        },
+    ]
+    connection.executemany(
+        "INSERT INTO updates (content, created_at) VALUES (:content, :created_at)",
+        sample_updates,
+    )
+
+
 def fetch_reviews() -> list[sqlite3.Row]:
     connection = get_connection()
     reviews = connection.execute(
@@ -145,10 +181,38 @@ def fetch_reviews() -> list[sqlite3.Row]:
     return reviews
 
 
+def fetch_updates(limit: int = 3) -> list[sqlite3.Row]:
+    connection = get_connection()
+    updates = connection.execute(
+        "SELECT * FROM updates ORDER BY created_at DESC LIMIT ?",
+        (limit,),
+    ).fetchall()
+    connection.close()
+    return updates
+
+
+def format_review_body(text: str) -> Markup:
+    escaped = html.escape(text)
+    escaped = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", escaped)
+    escaped = re.sub(r"\*(.+?)\*", r"<em>\1</em>", escaped)
+    escaped = re.sub(r"__(.+?)__", r"<u>\1</u>", escaped)
+    return Markup(escaped.replace("\n", "<br>"))
+
+
 @app.route("/")
 def home() -> str:
     reviews = fetch_reviews()
-    return render_template("index.html", reviews=reviews)
+    return render_template(
+        "index.html",
+        reviews=reviews[:8],
+        reviews_count=len(reviews),
+        updates=fetch_updates(),
+    )
+
+
+@app.route("/reviews")
+def reviews() -> str:
+    return render_template("reviews.html", reviews=fetch_reviews())
 
 
 @app.route("/reviews/<int:review_id>")
@@ -160,7 +224,11 @@ def review_detail(review_id: int) -> str:
     connection.close()
     if review is None:
         abort(404)
-    return render_template("review.html", review=review)
+    return render_template(
+        "review.html",
+        review=review,
+        formatted_body=format_review_body(review["review_body"]),
+    )
 
 
 @app.route("/opinion")
@@ -190,6 +258,17 @@ def tags() -> str:
 @app.route("/admin", methods=["GET", "POST"])
 def admin() -> str:
     if request.method == "POST":
+        if request.form.get("form_type") == "update":
+            content = request.form["content"].strip()
+            if content:
+                connection = get_connection()
+                connection.execute(
+                    "INSERT INTO updates (content, created_at) VALUES (?, ?)",
+                    (content, datetime.utcnow().isoformat()),
+                )
+                connection.commit()
+                connection.close()
+            return redirect(url_for("home"))
         payload = {
             "title": request.form["title"].strip(),
             "director": request.form["director"].strip(),

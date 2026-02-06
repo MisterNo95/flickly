@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reel Review House • All Reviews</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body>
+  <header class="hero hero-inner">
+    <nav class="nav">
+      <div class="logo">Reel Review House</div>
+      <div class="nav-links">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('reviews') }}">All Reviews</a>
+        <a href="{{ url_for('opinion') }}">Opinion</a>
+        <a href="{{ url_for('tags') }}">Tags</a>
+        <a href="{{ url_for('admin') }}">Admin</a>
+      </div>
+    </nav>
+    <div class="hero-content">
+      <p class="tagline">All reviews</p>
+      <h1>The full archive.</h1>
+      <p class="subtitle">Browse every review with scores, artwork, and quick notes.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="section reviews">
+      <div class="section-title">
+        <h2>Review archive</h2>
+        <p>Every entry in one place. Tap any reel for the full review.</p>
+      </div>
+      <div class="reel-grid">
+        {% for review in reviews %}
+        <a class="reel-card" href="{{ url_for('review_detail', review_id=review['id']) }}">
+          <div class="reel-image">
+            <img src="{{ review['image_url'] }}" alt="Poster for {{ review['title'] }}" />
+          </div>
+          <div class="reel-top">
+            <span class="rating">{{ review['score_overall'] }}</span>
+            <span class="label">{{ review['review_title'] }}</span>
+          </div>
+          <h3>{{ review['title'] }}</h3>
+          <p class="meta">{{ review['genre'] }} • {{ review['length'] }} min • {{ review['year'] }}</p>
+          <p class="review">{{ review['review_body'][:160] }}...</p>
+          <div class="reel-footer">
+            <span>Cinematography: {{ review['score_cinematography'] }}⭐</span>
+            <span>Story: {{ review['score_story'] }}⭐</span>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Reel Review House — every review in the archive.</p>
+  </footer>
+</body>
+</html>
