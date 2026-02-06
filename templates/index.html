@@ -3,21 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Reel Review House</title>
+  <title>The Flickly</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
 </head>
 <body>
   <header class="hero">
     <nav class="nav">
-      <div class="logo">Reel Review House</div>
+      <div class="logo">The Flickly</div>
       <div class="nav-links">
-        <a href="{{ url_for('home') }}#reviews">Reviews</a>
-        <a href="{{ url_for('home') }}#features">Features</a>
-        <a href="{{ url_for('opinion') }}">Now Showing</a>
         <a href="{{ url_for('reviews') }}">All Reviews</a>
         <a href="{{ url_for('featurettes') }}">Featurettes</a>
-        <a href="{{ url_for('opinion') }}">Opinion</a>
+        <a href="{{ url_for('updates') }}">Updates</a>
         <a href="{{ url_for('tags') }}">Tags</a>
+        <a href="{{ url_for('about') }}">About The Flickly</a>
         <a href="{{ url_for('admin') }}">Admin</a>
       </div>
     </nav>
@@ -44,7 +42,7 @@
           <h3>Featurettes</h3>
           <p>Long-form essays and deep dives on cinema craft, themes, and history.</p>
         </a>
-        <a class="feature-card" href="{{ url_for('opinion') }}">
+        <a class="feature-card" href="{{ url_for('updates') }}">
           <h3>Lobby notes</h3>
           <p>Short updates, quick rants, and theatre-lobby observations.</p>
         </a>
@@ -124,13 +122,13 @@
         {% endfor %}
       </div>
       <div class="see-more">
-        <a class="cta" href="{{ url_for('opinion') }}">See all lobby notes</a>
+        <a class="cta" href="{{ url_for('updates') }}">See all lobby notes</a>
       </div>
     </section>
   </main>
 
   <footer class="footer">
-    <p>Reel Review House — crafted for the love of cinema.</p>
+    <p>The Flickly — crafted for the love of cinema.</p>
   </footer>
 </body>
 </html>

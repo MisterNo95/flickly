@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Flickly • Updates</title>
+  <title>The Flickly • About</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
 </head>
 <body>
@@ -20,35 +20,37 @@
       </div>
     </nav>
     <div class="hero-content">
-      <p class="tagline">Updates</p>
-      <h1>Lobby notes and quick takes.</h1>
-      <p class="subtitle">Short updates, quick rants, and running commentary from the theatre lobby.</p>
+      <p class="tagline">About</p>
+      <h1>Welcome to The Flickly.</h1>
+      <p class="subtitle">A theatre-inspired corner for reviews, featurettes, and lobby notes.</p>
     </div>
   </header>
 
   <main>
-    <section class="section opinion">
+    <section class="section about">
       <div class="section-title">
-        <h2>Lobby notes archive</h2>
-        <p>Every quick thought, editorial, and update—collected in one scroll.</p>
+        <h2>What you’ll find here</h2>
+        <p>The Flickly is built for movie lovers who want both quick reactions and deep dives.</p>
       </div>
-      <div class="updates-grid">
-        {% for update in updates %}
-        <div class="update-card">
-          <span class="update-label">{{ update['note_type'] }}</span>
-          <h4>{{ update['title'] }}</h4>
-          <p>{{ update['body'] }}</p>
-          {% if update['note_date'] %}
-          <span class="update-date">{{ update['note_date'] }}</span>
-          {% endif %}
-        </div>
-        {% endfor %}
+      <div class="feature-grid">
+        <article>
+          <h3>Feature reels</h3>
+          <p>Full reviews with scores, posters, and structured verdicts.</p>
+        </article>
+        <article>
+          <h3>Featurettes</h3>
+          <p>Long-form essays that explore themes, craft, and cinema history.</p>
+        </article>
+        <article>
+          <h3>Lobby notes</h3>
+          <p>Quick updates, rants, and short thoughts straight from the lobby.</p>
+        </article>
       </div>
     </section>
   </main>
 
   <footer class="footer">
-    <p>The Flickly — updates between the reels.</p>
+    <p>The Flickly — crafted for the love of cinema.</p>
   </footer>
 </body>
 </html>

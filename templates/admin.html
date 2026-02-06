@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Reel Review House • Admin</title>
+  <title>The Flickly • Admin</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
 </head>
 <body>
   <header class="hero hero-inner">
     <nav class="nav">
-      <div class="logo">Reel Review House</div>
+      <div class="logo">The Flickly</div>
       <div class="nav-links">
-        <a href="{{ url_for('home') }}">Home</a>
         <a href="{{ url_for('reviews') }}">All Reviews</a>
         <a href="{{ url_for('featurettes') }}">Featurettes</a>
-        <a href="{{ url_for('opinion') }}">Opinion</a>
+        <a href="{{ url_for('updates') }}">Updates</a>
         <a href="{{ url_for('tags') }}">Tags</a>
+        <a href="{{ url_for('about') }}">About The Flickly</a>
         <a href="{{ url_for('admin') }}">Admin</a>
       </div>
     </nav>
@@ -151,7 +151,7 @@
   </main>
 
   <footer class="footer">
-    <p>Reel Review House — admin entry portal.</p>
+    <p>The Flickly — admin entry portal.</p>
   </footer>
 </body>
 </html>

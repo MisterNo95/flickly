@@ -390,9 +390,14 @@ def review_detail(review_id: int) -> str:
     )
 
 
-@app.route("/opinion")
-def opinion() -> str:
+@app.route("/updates")
+def updates() -> str:
     return render_template("opinion.html", updates=fetch_updates(limit=None))
+
+
+@app.route("/about")
+def about() -> str:
+    return render_template("about.html")
 
 
 @app.route("/tags")
