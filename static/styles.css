@@ -653,6 +653,36 @@ a {
   color: var(--muted);
 }
 
+.about-highlight {
+  padding-top: 0;
+}
+
+.about-panel {
+  background: rgba(12, 11, 16, 0.8);
+  border: 1px solid rgba(214, 167, 86, 0.2);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+}
+
+.about-panel h2 {
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 12px;
+}
+
+.about-panel p {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.about-links {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+}
+
 .form-grid {
   display: grid;
   gap: 18px;

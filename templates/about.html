@@ -9,7 +9,7 @@
 <body>
   <header class="hero hero-inner">
     <nav class="nav">
-      <div class="logo">The Flickly</div>
+      <a class="logo" href="{{ url_for('home') }}">The Flickly</a>
       <div class="nav-links">
         <a href="{{ url_for('reviews') }}">All Reviews</a>
         <a href="{{ url_for('featurettes') }}">Featurettes</a>
@@ -45,6 +45,18 @@
           <h3>Lobby notes</h3>
           <p>Quick updates, rants, and short thoughts straight from the lobby.</p>
         </article>
+      </div>
+    </section>
+
+    <section class="section about-highlight">
+      <div class="about-panel">
+        <h2>Our mission</h2>
+        <p>We celebrate cinema with the same care as a premiere night. From crisp, structured reviews to thoughtful essays and lobby notes, The Flickly keeps the projector running on curiosity, craft, and community.</p>
+        <div class="about-links">
+          <a class="cta" href="https://x.com/theflickly" target="_blank" rel="noreferrer">Follow @theflickly on X</a>
+          <a class="tag-link" href="{{ url_for('reviews') }}">Browse reviews</a>
+          <a class="tag-link" href="{{ url_for('featurettes') }}">Read featurettes</a>
+        </div>
       </div>
     </section>
   </main>
