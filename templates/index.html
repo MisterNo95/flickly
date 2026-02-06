@@ -58,10 +58,14 @@
         <h2>Feature reels</h2>
         <p>Proof the projector is on—real entries glowing with review detail. Tap a card to open the full page.</p>
       </div>
-      <div class="reel-grid">
+      <div class="reel-carousel">
+        <button class="reel-arrow" type="button" data-direction="prev" aria-label="View previous reviews">
+          &#8592;
+        </button>
+        <div class="reel-grid reel-track">
         {% if reviews %}
         {% for review in reviews %}
-        <a class="reel-card" href="{{ url_for('review_detail', review_id=review['id']) }}">
+        <a class="reel-card" href="{{ url_for('review_detail', review_id=review['id']) }}" data-reel-index="{{ loop.index0 }}">
           <div class="reel-image">
             <img src="{{ review['image_url'] }}" alt="Poster for {{ review['title'] }}" />
           </div>
@@ -96,12 +100,14 @@
           </div>
         </div>
         {% endif %}
+        </div>
+        <button class="reel-arrow" type="button" data-direction="next" aria-label="View next reviews">
+          &#8594;
+        </button>
       </div>
-      {% if reviews_count > 8 %}
       <div class="see-more">
         <a class="cta" href="{{ url_for('reviews') }}">See more reviews</a>
       </div>
-      {% endif %}
     </section>
 
     <section id="now-showing" class="section now-showing">
@@ -130,5 +136,45 @@
   <footer class="footer">
     <p>The Flickly — crafted for the love of cinema.</p>
   </footer>
+  <script>
+    const reelCards = Array.from(document.querySelectorAll(".reel-card"));
+    const reelArrows = Array.from(document.querySelectorAll(".reel-arrow"));
+    let reelPage = 0;
+    const reelsPerPage = 4;
+
+    const updateReelView = () => {
+      const start = reelPage * reelsPerPage;
+      const end = start + reelsPerPage;
+      reelCards.forEach((card, index) => {
+        card.classList.toggle("is-hidden", index < start || index >= end);
+      });
+      reelArrows.forEach((arrow) => {
+        if (arrow.dataset.direction === "prev") {
+          arrow.disabled = reelPage === 0;
+        } else {
+          arrow.disabled = end >= reelCards.length;
+        }
+      });
+    };
+
+    if (reelCards.length > reelsPerPage) {
+      reelArrows.forEach((arrow) => {
+        arrow.addEventListener("click", () => {
+          const maxPage = Math.floor((reelCards.length - 1) / reelsPerPage);
+          if (arrow.dataset.direction === "next") {
+            reelPage = Math.min(reelPage + 1, maxPage);
+          } else {
+            reelPage = Math.max(reelPage - 1, 0);
+          }
+          updateReelView();
+        });
+      });
+      updateReelView();
+    } else {
+      reelArrows.forEach((arrow) => {
+        arrow.classList.add("is-hidden");
+      });
+    }
+  </script>
 </body>
 </html>
