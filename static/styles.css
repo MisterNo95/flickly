@@ -555,6 +555,10 @@ a {
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
+.updates-grid-archive {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .update-card {
   background: rgba(12, 11, 16, 0.7);
   border: 1px solid rgba(214, 167, 86, 0.2);
@@ -754,6 +758,10 @@ a {
   }
 
   .reviews-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .updates-grid-archive {
     grid-template-columns: 1fr;
   }
 
