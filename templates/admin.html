@@ -127,9 +127,23 @@
         <input type="hidden" name="form_type" value="update" />
         <h3>Lobby updates</h3>
         <p class="form-hint">Post short, Twitter-style updates for the “Now showing” feed.</p>
+        <div class="form-grid">
+          <label>
+            Title
+            <input type="text" name="title" required />
+          </label>
+          <label>
+            Type of note
+            <input type="text" name="note_type" placeholder="Editorial, Quick rant" required />
+          </label>
+          <label>
+            Date
+            <input type="text" name="note_date" placeholder="Aug 22, 2024" required />
+          </label>
+        </div>
         <label class="full-width">
-          Update text
-          <textarea name="content" rows="4" required></textarea>
+          Note body
+          <textarea name="body" rows="4" required></textarea>
         </label>
         <button class="cta" type="submit">Publish update</button>
       </form>

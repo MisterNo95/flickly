@@ -537,6 +537,8 @@ a {
   border-radius: 18px;
   padding: 20px;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+  display: grid;
+  gap: 8px;
 }
 
 .update-label {
@@ -546,6 +548,16 @@ a {
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--gold);
+}
+
+.update-card h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+}
+
+.update-date {
+  font-size: 0.75rem;
+  color: var(--muted);
 }
 
 .featurette-grid {

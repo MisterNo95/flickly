@@ -59,11 +59,16 @@ def init_db() -> None:
         """
         CREATE TABLE IF NOT EXISTS updates (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            content TEXT NOT NULL,
+            title TEXT,
+            body TEXT,
+            note_type TEXT,
+            note_date TEXT,
+            content TEXT,
             created_at TEXT NOT NULL
         )
         """
     )
+    migrate_updates_table(connection)
     count = connection.execute("SELECT COUNT(*) FROM reviews").fetchone()[0]
     if count == 0:
         seed_reviews(connection)
@@ -171,20 +176,35 @@ def seed_reviews(connection: sqlite3.Connection) -> None:
 def seed_updates(connection: sqlite3.Connection) -> None:
     sample_updates = [
         {
+            "title": "Late-night screening",
+            "body": "Tonight's watch: a 90s thriller marathon. I'll post quick notes after the credits.",
+            "note_type": "Quick rant",
+            "note_date": "Aug 20, 2024",
             "content": "Tonight's watch: a 90s thriller marathon. I'll post quick notes after the credits.",
             "created_at": datetime.utcnow().isoformat(),
         },
         {
+            "title": "Practical beats digital",
+            "body": "Hot take: practical sets still beat CGI when it comes to mood and texture.",
+            "note_type": "Editorial",
+            "note_date": "Aug 18, 2024",
             "content": "Hot take: practical sets still beat CGI when it comes to mood and texture.",
             "created_at": datetime.utcnow().isoformat(),
         },
         {
+            "title": "Festival season",
+            "body": "Festival season is here—send me your hidden gems.",
+            "note_type": "Update",
+            "note_date": "Aug 10, 2024",
             "content": "Festival season is here—send me your hidden gems.",
             "created_at": datetime.utcnow().isoformat(),
         },
     ]
     connection.executemany(
-        "INSERT INTO updates (content, created_at) VALUES (:content, :created_at)",
+        """
+        INSERT INTO updates (title, body, note_type, note_date, content, created_at)
+        VALUES (:title, :body, :note_type, :note_date, :content, :created_at)
+        """,
         sample_updates,
     )
 
@@ -205,6 +225,21 @@ def seed_featurettes(connection: sqlite3.Connection) -> None:
     )
 
 
+def migrate_updates_table(connection: sqlite3.Connection) -> None:
+    existing_columns = {
+        row[1] for row in connection.execute("PRAGMA table_info(updates)").fetchall()
+    }
+    migrations = {
+        "title": "ALTER TABLE updates ADD COLUMN title TEXT",
+        "body": "ALTER TABLE updates ADD COLUMN body TEXT",
+        "note_type": "ALTER TABLE updates ADD COLUMN note_type TEXT",
+        "note_date": "ALTER TABLE updates ADD COLUMN note_date TEXT",
+    }
+    for column, statement in migrations.items():
+        if column not in existing_columns:
+            connection.execute(statement)
+
+
 def fetch_reviews() -> list[sqlite3.Row]:
     connection = get_connection()
     reviews = connection.execute(
@@ -217,7 +252,18 @@ def fetch_reviews() -> list[sqlite3.Row]:
 def fetch_updates(limit: int = 3) -> list[sqlite3.Row]:
     connection = get_connection()
     updates = connection.execute(
-        "SELECT * FROM updates ORDER BY created_at DESC LIMIT ?",
+        """
+        SELECT
+            id,
+            COALESCE(title, 'Lobby note') AS title,
+            COALESCE(body, content, '') AS body,
+            COALESCE(note_type, 'Update') AS note_type,
+            COALESCE(note_date, '') AS note_date,
+            created_at
+        FROM updates
+        ORDER BY created_at DESC
+        LIMIT ?
+        """,
         (limit,),
     ).fetchall()
     connection.close()
@@ -331,12 +377,29 @@ def tags() -> str:
 def admin() -> str:
     if request.method == "POST":
         if request.form.get("form_type") == "update":
-            content = request.form["content"].strip()
-            if content:
+            title = request.form["title"].strip()
+            body = request.form["body"].strip()
+            note_type = request.form["note_type"].strip()
+            note_date = request.form["note_date"].strip()
+            if body:
                 connection = get_connection()
                 connection.execute(
-                    "INSERT INTO updates (content, created_at) VALUES (?, ?)",
-                    (content, datetime.utcnow().isoformat()),
+                    """
+                    INSERT INTO updates (
+                        title,
+                        body,
+                        note_type,
+                        note_date,
+                        created_at
+                    ) VALUES (?, ?, ?, ?, ?)
+                    """,
+                    (
+                        title,
+                        body,
+                        note_type,
+                        note_date,
+                        datetime.utcnow().isoformat(),
+                    ),
                 )
                 connection.commit()
                 connection.close()
