@@ -32,7 +32,7 @@
         <h2>Review archive</h2>
         <p>Every entry in one place. Tap any reel for the full review.</p>
       </div>
-      <div class="reel-grid">
+      <div class="reel-grid reviews-grid">
         {% for review in reviews %}
         <a class="reel-card" href="{{ url_for('review_detail', review_id=review['id']) }}">
           <div class="reel-image">
@@ -52,6 +52,17 @@
         </a>
         {% endfor %}
       </div>
+      {% if total_pages > 1 %}
+      <div class="pagination">
+        {% if page > 1 %}
+        <a class="cta" href="{{ url_for('reviews', page=page-1) }}">Previous</a>
+        {% endif %}
+        <span>Page {{ page }} of {{ total_pages }}</span>
+        {% if page < total_pages %}
+        <a class="cta" href="{{ url_for('reviews', page=page+1) }}">Next</a>
+        {% endif %}
+      </div>
+      {% endif %}
     </section>
   </main>
 

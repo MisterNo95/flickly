@@ -203,6 +203,10 @@ a {
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
 
+.reviews-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .reel-card {
   display: block;
   background: var(--velvet);
@@ -640,6 +644,15 @@ a {
   justify-content: center;
 }
 
+.pagination {
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: var(--muted);
+}
+
 .form-grid {
   display: grid;
   gap: 18px;
@@ -708,6 +721,10 @@ a {
 
   .reel-image img {
     height: 160px;
+  }
+
+  .reviews-grid {
+    grid-template-columns: 1fr;
   }
 
   .featurette-grid {

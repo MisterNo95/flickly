@@ -243,13 +243,25 @@ def migrate_updates_table(connection: sqlite3.Connection) -> None:
             connection.execute(statement)
 
 
-def fetch_reviews() -> list[sqlite3.Row]:
+def fetch_reviews(offset: int = 0, limit: int | None = None) -> list[sqlite3.Row]:
     connection = get_connection()
-    reviews = connection.execute(
-        "SELECT * FROM reviews ORDER BY created_at DESC"
-    ).fetchall()
+    base_query = "SELECT * FROM reviews ORDER BY created_at DESC"
+    if limit is None:
+        reviews = connection.execute(base_query).fetchall()
+    else:
+        reviews = connection.execute(
+            f"{base_query} LIMIT ? OFFSET ?",
+            (limit, offset),
+        ).fetchall()
     connection.close()
     return reviews
+
+
+def count_reviews() -> int:
+    connection = get_connection()
+    total = connection.execute("SELECT COUNT(*) FROM reviews").fetchone()[0]
+    connection.close()
+    return total
 
 
 def fetch_updates(limit: int | None = 3) -> list[sqlite3.Row]:
@@ -350,7 +362,18 @@ def home() -> str:
 
 @app.route("/reviews")
 def reviews() -> str:
-    return render_template("reviews.html", reviews=fetch_reviews())
+    page = int(request.args.get("page", 1))
+    per_page = 9
+    total = count_reviews()
+    total_pages = max(1, (total + per_page - 1) // per_page)
+    page = max(1, min(page, total_pages))
+    offset = (page - 1) * per_page
+    return render_template(
+        "reviews.html",
+        reviews=fetch_reviews(offset=offset, limit=per_page),
+        page=page,
+        total_pages=total_pages,
+    )
 
 
 @app.route("/featurettes")
