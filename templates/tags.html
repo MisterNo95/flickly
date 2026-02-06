@@ -32,6 +32,48 @@
         <h2>Explore by tag</h2>
         <p>These groupings can grow as you add more reviews. Each card highlights a different path into the archive.</p>
       </div>
+      {% if selected_tag %}
+      <div class="tag-results">
+        <h3>Showing results for “{{ selected_tag }}”</h3>
+        <p><a class="tag-link" href="{{ url_for('tags') }}">Clear filter</a></p>
+        {% if filtered_reviews %}
+        <div class="tag-section">
+          <h4>Reviews</h4>
+          <div class="reel-grid">
+            {% for review in filtered_reviews %}
+            <a class="reel-card" href="{{ url_for('review_detail', review_id=review['id']) }}">
+              <div class="reel-image">
+                <img src="{{ review['image_url'] }}" alt="Poster for {{ review['title'] }}" />
+              </div>
+              <div class="reel-top">
+                <span class="rating">{{ review['score_overall'] }}</span>
+                <span class="label">{{ review['review_title'] }}</span>
+              </div>
+              <h3>{{ review['title'] }}</h3>
+              <p class="meta">{{ review['genre'] }} • {{ review['length'] }} min • {{ review['year'] }}</p>
+              <p class="review">{{ review['review_body'][:160] }}...</p>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+        {% if filtered_featurettes %}
+        <div class="tag-section">
+          <h4>Featurettes</h4>
+          <div class="featurette-grid">
+            {% for featurette in filtered_featurettes %}
+            <a class="featurette-card" href="{{ url_for('featurette_detail', featurette_id=featurette['id']) }}">
+              <div class="featurette-image">
+                <img src="{{ featurette['image_url'] }}" alt="Artwork for {{ featurette['title'] }}" />
+              </div>
+              <h3>{{ featurette['title'] }}</h3>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
       <div class="tag-grid">
         <article id="matinee" class="tag-card">
           <h3>Matinee Spotlight</h3>
@@ -72,24 +114,24 @@
         <div>
           <h4>All tags</h4>
           <p>
-            {% for tag in all_tags %}
-            <span class="inline-tag">{{ tag }}</span>
+            {% for tag, count in all_tags.items() %}
+            <a class="inline-tag" href="{{ url_for('tag_filter', tag=tag) }}">{{ tag }} ({{ count }})</a>
             {% endfor %}
           </p>
         </div>
         <div>
           <h4>Years</h4>
           <p>
-            {% for year in years %}
-            <span class="inline-tag">{{ year }}</span>
+            {% for year, count in years.items() %}
+            <a class="inline-tag" href="{{ url_for('tag_filter', tag=year) }}">{{ year }} ({{ count }})</a>
             {% endfor %}
           </p>
         </div>
         <div>
           <h4>Genres</h4>
           <p>
-            {% for genre in genres %}
-            <span class="inline-tag">{{ genre }}</span>
+            {% for genre, count in genres.items() %}
+            <a class="inline-tag" href="{{ url_for('tag_filter', tag=genre) }}">{{ genre }} ({{ count }})</a>
             {% endfor %}
           </p>
         </div>

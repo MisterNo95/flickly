@@ -7,6 +7,7 @@ import re
 from pathlib import Path
 
 from flask import Flask, abort, redirect, render_template, request, url_for
+from urllib.parse import unquote
 from markupsafe import Markup
 
 DB_PATH = Path("reviews.db")
@@ -281,6 +282,44 @@ def fetch_featurettes() -> list[sqlite3.Row]:
     return featurettes
 
 
+def parse_tags(raw: str) -> list[str]:
+    return [tag.strip() for tag in raw.split(",") if tag.strip()]
+
+
+def normalize_tag(tag: str) -> str:
+    return tag.strip().lower()
+
+
+def review_tag_set(review: sqlite3.Row) -> set[str]:
+    tags = {normalize_tag(tag) for tag in parse_tags(review["tags"])}
+    tags.add(normalize_tag(review["genre"]))
+    tags.add(normalize_tag(str(review["year"])))
+    return tags
+
+
+def featurette_tag_set(featurette: sqlite3.Row) -> set[str]:
+    return {normalize_tag(tag) for tag in parse_tags(featurette["tags"])}
+
+
+def build_tag_catalog(reviews: list[sqlite3.Row], featurettes: list[sqlite3.Row]) -> dict:
+    tag_counts: dict[str, int] = {}
+    years: dict[str, int] = {}
+    genres: dict[str, int] = {}
+    for review in reviews:
+        years[str(review["year"])] = years.get(str(review["year"]), 0) + 1
+        genres[review["genre"]] = genres.get(review["genre"], 0) + 1
+        for tag in parse_tags(review["tags"]):
+            tag_counts[tag] = tag_counts.get(tag, 0) + 1
+    for featurette in featurettes:
+        for tag in parse_tags(featurette["tags"]):
+            tag_counts[tag] = tag_counts.get(tag, 0) + 1
+    return {
+        "tags": dict(sorted(tag_counts.items(), key=lambda item: item[0].lower())),
+        "years": dict(sorted(years.items(), key=lambda item: item[0])),
+        "genres": dict(sorted(genres.items(), key=lambda item: item[0].lower())),
+    }
+
+
 def format_review_body(text: str) -> Markup:
     escaped = html.escape(text)
     escaped = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", escaped)
@@ -359,19 +398,41 @@ def opinion() -> str:
 @app.route("/tags")
 def tags() -> str:
     reviews = fetch_reviews()
-    tag_set: set[str] = set()
-    years: set[str] = set()
-    genres: set[str] = set()
-    for review in reviews:
-        years.add(str(review["year"]))
-        genres.add(review["genre"])
-        for tag in review["tags"].split(","):
-            tag_set.add(tag.strip())
+    featurettes = fetch_featurettes()
+    catalog = build_tag_catalog(reviews, featurettes)
     return render_template(
         "tags.html",
-        all_tags=sorted(tag_set),
-        years=sorted(years),
-        genres=sorted(genres),
+        all_tags=catalog["tags"],
+        years=catalog["years"],
+        genres=catalog["genres"],
+        selected_tag=None,
+        filtered_reviews=[],
+        filtered_featurettes=[],
+    )
+
+
+@app.route("/tags/<tag>")
+def tag_filter(tag: str) -> str:
+    reviews = fetch_reviews()
+    featurettes = fetch_featurettes()
+    catalog = build_tag_catalog(reviews, featurettes)
+    selected = normalize_tag(unquote(tag))
+    filtered_reviews = [
+        review for review in reviews if selected in review_tag_set(review)
+    ]
+    filtered_featurettes = [
+        featurette
+        for featurette in featurettes
+        if selected in featurette_tag_set(featurette)
+    ]
+    return render_template(
+        "tags.html",
+        all_tags=catalog["tags"],
+        years=catalog["years"],
+        genres=catalog["genres"],
+        selected_tag=unquote(tag),
+        filtered_reviews=filtered_reviews,
+        filtered_featurettes=filtered_featurettes,
     )
 
 

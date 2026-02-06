@@ -456,12 +456,16 @@ a {
   gap: 10px;
 }
 
-.tag-row span {
+.tag-row span,
+.tag-row a {
   background: rgba(214, 167, 86, 0.12);
   border: 1px solid rgba(214, 167, 86, 0.25);
   padding: 6px 12px;
   border-radius: 999px;
   font-size: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .inline-tag {
@@ -472,6 +476,22 @@ a {
   background: rgba(214, 167, 86, 0.12);
   border: 1px solid rgba(214, 167, 86, 0.25);
   font-size: 0.75rem;
+}
+
+.tag-link {
+  color: var(--cream);
+}
+
+.tag-results {
+  margin-bottom: 32px;
+  background: rgba(12, 11, 16, 0.7);
+  border: 1px solid rgba(214, 167, 86, 0.2);
+  border-radius: 20px;
+  padding: 24px;
+}
+
+.tag-section {
+  margin-top: 24px;
 }
 
 .opinion-card,

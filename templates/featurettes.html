@@ -41,7 +41,7 @@
           <h3>{{ featurette['title'] }}</h3>
           <div class="tag-row">
             {% for tag in featurette['tags'].split(',') %}
-            <span>{{ tag.strip() }}</span>
+            <a class="tag-link" href="{{ url_for('tag_filter', tag=tag.strip()) }}">{{ tag.strip() }}</a>
             {% endfor %}
           </div>
         </a>
