@@ -39,11 +39,6 @@
             <img src="{{ featurette['image_url'] }}" alt="Artwork for {{ featurette['title'] }}" />
           </div>
           <h3>{{ featurette['title'] }}</h3>
-          <div class="tag-row">
-            {% for tag in featurette['tags'].split(',') %}
-            <a class="tag-link" href="{{ url_for('tag_filter', tag=tag.strip()) }}">{{ tag.strip() }}</a>
-            {% endfor %}
-          </div>
         </a>
         {% endfor %}
       </div>
