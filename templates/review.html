@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reel Review House • Reviews</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body>
+  <header class="hero hero-inner">
+    <nav class="nav">
+      <div class="logo">Reel Review House</div>
+      <div class="nav-links">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('home') }}#reviews">Reviews</a>
+        <a href="{{ url_for('opinion') }}">Opinion</a>
+        <a href="{{ url_for('tags') }}">Tags</a>
+        <a href="{{ url_for('admin') }}">Admin</a>
+      </div>
+    </nav>
+    <div class="hero-content">
+      <p class="tagline">Full-length review pages</p>
+      <h1>The complete reel.</h1>
+      <p class="subtitle">Each review lives on its own spotlight-ready page with structure, imagery, and scene notes.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="section review-page">
+      <div class="review-hero">
+        <div>
+          <p class="review-label">{{ review['genre'] }} • {{ review['length'] }} min • {{ review['year'] }}</p>
+          <h2>{{ review['title'] }}</h2>
+          <p class="review-byline">Directed by {{ review['director'] }} • Reviewed by Reel Review House</p>
+          <div class="review-score">
+            <span>Score</span>
+            <strong>{{ review['score_overall'] }} / 5</strong>
+          </div>
+        </div>
+        <img src="{{ review['image_url'] }}" alt="Review art for {{ review['title'] }}" />
+      </div>
+      <div class="review-body">
+        <div class="review-section">
+          <h3>{{ review['review_title'] }}</h3>
+          <p>{{ review['review_body'] }}</p>
+        </div>
+      </div>
+      <div class="review-meta">
+        <div>
+          <h4>Tags</h4>
+          <div class="tag-row">
+            {% for tag in review['tags'].split(',') %}
+            <span>{{ tag.strip() }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        <div>
+          <h4>Quick notes</h4>
+          <p>Cinematography: {{ review['score_cinematography'] }}⭐ • Acting: {{ review['score_acting'] }}⭐ • Story: {{ review['score_story'] }}⭐</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Reel Review House — full reviews, one reel at a time.</p>
+  </footer>
+</body>
+</html>

@@ -433,6 +433,16 @@ a {
   font-size: 0.75rem;
 }
 
+.inline-tag {
+  display: inline-flex;
+  margin: 4px 6px 0 0;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(214, 167, 86, 0.12);
+  border: 1px solid rgba(214, 167, 86, 0.25);
+  font-size: 0.75rem;
+}
+
 .opinion-card,
 .tag-card {
   background: var(--bg-alt);
@@ -461,6 +471,53 @@ a {
   gap: 20px;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   color: var(--muted);
+}
+
+.review-form {
+  background: var(--bg-alt);
+  border-radius: 24px;
+  padding: 32px;
+  border: 1px solid rgba(214, 167, 86, 0.2);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+  display: grid;
+  gap: 20px;
+}
+
+.form-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.review-form label {
+  display: grid;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.review-form input,
+.review-form textarea {
+  background: rgba(12, 11, 16, 0.8);
+  border: 1px solid rgba(214, 167, 86, 0.2);
+  border-radius: 12px;
+  padding: 10px 12px;
+  color: var(--cream);
+  font-family: inherit;
+}
+
+.review-form input:focus,
+.review-form textarea:focus {
+  outline: 2px solid rgba(214, 167, 86, 0.5);
+  border-color: rgba(214, 167, 86, 0.5);
+}
+
+.review-form .full-width {
+  grid-column: 1 / -1;
+}
+
+.review-form button {
+  width: fit-content;
 }
 
 @media (max-width: 720px) {
