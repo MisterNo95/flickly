@@ -387,19 +387,21 @@ def admin() -> str:
                 connection = get_connection()
                 connection.execute(
                     """
-                    INSERT INTO updates (
+                INSERT INTO updates (
                         title,
                         body,
                         note_type,
                         note_date,
+                        content,
                         created_at
-                    ) VALUES (?, ?, ?, ?, ?)
+                    ) VALUES (?, ?, ?, ?, ?, ?)
                     """,
                     (
                         title,
                         body,
                         note_type,
                         note_date,
+                        body,
                         datetime.utcnow().isoformat(),
                     ),
                 )
