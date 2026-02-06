@@ -583,7 +583,7 @@ a {
 .featurette-grid {
   display: grid;
   gap: 24px;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .featurette-card {
@@ -595,6 +595,12 @@ a {
   display: grid;
   gap: 12px;
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.featurette-excerpt {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
 }
 
 .featurette-card .tag-row {
@@ -702,5 +708,9 @@ a {
 
   .reel-image img {
     height: 160px;
+  }
+
+  .featurette-grid {
+    grid-template-columns: 1fr;
   }
 }
