@@ -599,11 +599,14 @@ a {
 
 .featurette-card .tag-row {
   gap: 8px;
+  flex-wrap: wrap;
 }
 
-.featurette-card .tag-row a {
+.featurette-card .tag-row a.tag-link {
   font-size: 0.7rem;
   padding: 4px 10px;
+  line-height: 1.1;
+  align-items: center;
 }
 
 .featurette-card:hover {
