@@ -15,8 +15,10 @@ app = Flask(__name__)
 
 
 def get_connection() -> sqlite3.Connection:
-    connection = sqlite3.connect(DB_PATH)
+    connection = sqlite3.connect(DB_PATH, timeout=10, check_same_thread=False)
     connection.row_factory = sqlite3.Row
+    connection.execute("PRAGMA journal_mode=WAL")
+    connection.execute("PRAGMA busy_timeout = 5000")
     return connection
 
 
@@ -249,10 +251,9 @@ def fetch_reviews() -> list[sqlite3.Row]:
     return reviews
 
 
-def fetch_updates(limit: int = 3) -> list[sqlite3.Row]:
+def fetch_updates(limit: int | None = 3) -> list[sqlite3.Row]:
     connection = get_connection()
-    updates = connection.execute(
-        """
+    query = """
         SELECT
             id,
             COALESCE(title, 'Lobby note') AS title,
@@ -262,10 +263,11 @@ def fetch_updates(limit: int = 3) -> list[sqlite3.Row]:
             created_at
         FROM updates
         ORDER BY created_at DESC
-        LIMIT ?
-        """,
-        (limit,),
-    ).fetchall()
+    """
+    if limit is None:
+        updates = connection.execute(query).fetchall()
+    else:
+        updates = connection.execute(f"{query} LIMIT ?", (limit,)).fetchall()
     connection.close()
     return updates
 
@@ -351,7 +353,7 @@ def review_detail(review_id: int) -> str:
 
 @app.route("/opinion")
 def opinion() -> str:
-    return render_template("opinion.html")
+    return render_template("opinion.html", updates=fetch_updates(limit=None))
 
 
 @app.route("/tags")

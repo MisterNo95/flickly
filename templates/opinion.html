@@ -29,30 +29,21 @@
   <main>
     <section class="section opinion">
       <div class="section-title">
-        <h2>Why the theatre experience still matters</h2>
-        <p>Share bold takes, hot takes, and the quiet truths that come after the credits roll.</p>
+        <h2>Lobby notes archive</h2>
+        <p>Every quick thought, editorial, and update—collected in one scroll.</p>
       </div>
-      <article class="opinion-card">
-        <p class="opinion-date">August 18, 2024 • Editorial</p>
-        <h3>The sound of a room breathing</h3>
-        <p>Streaming has made cinema portable, but nothing replaces the collective inhale when the lights dim. The theatre is a ritual: footsteps in the lobby, the first crackle of trailers, and the way an audience leans forward together. That shared gasp is a story beat of its own.</p>
-        <p>When filmmakers craft for the big screen, they’re composing for scale, for surround, and for a crowd. The sound mix is richer. The shadows are deeper. The pauses land with weight. That’s the magic worth protecting.</p>
-        <div class="tag-row">
-          <span>Theatre</span>
-          <span>Sound</span>
-          <span>Experience</span>
+      <div class="updates-grid">
+        {% for update in updates %}
+        <div class="update-card">
+          <span class="update-label">{{ update['note_type'] }}</span>
+          <h4>{{ update['title'] }}</h4>
+          <p>{{ update['body'] }}</p>
+          {% if update['note_date'] %}
+          <span class="update-date">{{ update['note_date'] }}</span>
+          {% endif %}
         </div>
-      </article>
-      <article class="opinion-card">
-        <p class="opinion-date">August 02, 2024 • Quick Rant</p>
-        <h3>Give practical sets their flowers</h3>
-        <p>There’s a texture to practical sets that CGI still can’t fake. The way light wraps around real materials adds depth to every frame. Whenever a film chooses physical craft, the camera drinks it in—and so do we.</p>
-        <div class="tag-row">
-          <span>Production</span>
-          <span>Practical FX</span>
-          <span>Craft</span>
-        </div>
-      </article>
+        {% endfor %}
+      </div>
     </section>
   </main>
 

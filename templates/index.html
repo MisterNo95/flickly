@@ -13,7 +13,7 @@
       <div class="nav-links">
         <a href="{{ url_for('home') }}#reviews">Reviews</a>
         <a href="{{ url_for('home') }}#features">Features</a>
-        <a href="{{ url_for('home') }}#now-showing">Now Showing</a>
+        <a href="{{ url_for('opinion') }}">Now Showing</a>
         <a href="{{ url_for('reviews') }}">All Reviews</a>
         <a href="{{ url_for('featurettes') }}">Featurettes</a>
         <a href="{{ url_for('opinion') }}">Opinion</a>
@@ -44,7 +44,7 @@
           <h3>Featurettes</h3>
           <p>Long-form essays and deep dives on cinema craft, themes, and history.</p>
         </a>
-        <a class="feature-card" href="{{ url_for('home') }}#now-showing">
+        <a class="feature-card" href="{{ url_for('opinion') }}">
           <h3>Lobby notes</h3>
           <p>Short updates, quick rants, and theatre-lobby observations.</p>
         </a>
@@ -122,6 +122,9 @@
           {% endif %}
         </div>
         {% endfor %}
+      </div>
+      <div class="see-more">
+        <a class="cta" href="{{ url_for('opinion') }}">See all lobby notes</a>
       </div>
     </section>
   </main>
