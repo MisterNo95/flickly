@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dream Admin | Flickly Oracle</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="container navbar">
+        <a class="brand" href="../../index.html">Flickly Oracle</a>
+        <nav class="nav-links">
+          <a href="index.html">Dream Dictionary</a>
+          <a href="admin.html">Admin Sanctuary</a>
+          <a href="../tarot/index.html">Tarot</a>
+          <a href="../zodiac/index.html">Zodiac</a>
+        </nav>
+      </div>
+    </header>
+
+    <section class="page-hero">
+      <div class="container">
+        <h1>Dream Administration</h1>
+        <p>
+          Secure access to the living archive. Manage entries, categories, and preserve the integrity
+          of the dream dictionary. Use the sacred key <strong>oracle</strong> to enter this panel.
+        </p>
+        <p id="admin-status" class="section-subtitle">Secure access required</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <form id="admin-login" class="admin-panel">
+          <label for="admin-password">Admin Passphrase</label>
+          <input id="admin-password" type="password" placeholder="Enter passphrase" required />
+          <button class="button" type="submit">Enter Sanctuary</button>
+        </form>
+
+        <div id="admin-shell" class="admin-shell" style="display: none;">
+          <div class="admin-panel">
+            <h2 class="section-title">Dream Entries</h2>
+            <div id="admin-dream-list" class="dream-results"></div>
+          </div>
+          <div class="admin-panel">
+            <h2 class="section-title">Add / Edit Dream</h2>
+            <form id="admin-dream-form" class="list">
+              <label for="dream-title">Title</label>
+              <input id="dream-title" type="text" required />
+              <label for="dream-description">Description</label>
+              <textarea id="dream-description" rows="3" required></textarea>
+              <label for="dream-spiritual">Spiritual Meaning</label>
+              <textarea id="dream-spiritual" rows="2" required></textarea>
+              <label for="dream-psychological">Psychological Interpretation</label>
+              <textarea id="dream-psychological" rows="2" required></textarea>
+              <label for="dream-cultural">Cultural Symbolism</label>
+              <textarea id="dream-cultural" rows="2" required></textarea>
+              <label for="dream-category">Category</label>
+              <select id="dream-category">
+                <option>Animals</option>
+                <option>Objects</option>
+                <option>Emotions</option>
+                <option>People</option>
+                <option>Places</option>
+                <option>Actions</option>
+              </select>
+              <label for="dream-summary">Related Dreams (comma separated)</label>
+              <input id="dream-summary" type="text" />
+              <label>Rich Text Editor</label>
+              <div class="toolbar">
+                <button type="button" data-command="bold">Bold</button>
+                <button type="button" data-command="italic">Italic</button>
+                <button type="button" data-command="underline">Underline</button>
+              </div>
+              <div id="dream-editor" class="editor" contenteditable="true"></div>
+              <button class="button" type="submit">Save Entry</button>
+            </form>
+          </div>
+          <div class="admin-panel">
+            <h2 class="section-title">Manage Categories</h2>
+            <form id="admin-category-form" class="list">
+              <label for="new-category">Add Category</label>
+              <input id="new-category" type="text" placeholder="e.g. Symbols" />
+              <button class="button" type="submit">Add Category</button>
+            </form>
+            <p class="section-subtitle">
+              Categories are stored locally for this session. For a full CMS, connect this panel to your
+              database layer.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <div class="footer-links">
+          <span>Dream Administration • Flickly Oracle</span>
+          <a href="../../index.html">Return to Home</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../../app.js"></script>
+  </body>
+</html>
