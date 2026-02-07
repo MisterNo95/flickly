@@ -62,10 +62,10 @@
         <button class="reel-arrow" type="button" data-direction="prev" aria-label="View previous reviews">
           &#8592;
         </button>
-        <div class="reel-grid reel-track">
+        <div class="reel-grid reel-track" aria-live="polite">
         {% if reviews %}
         {% for review in reviews %}
-        <a class="reel-card" href="{{ url_for('review_detail', review_id=review['id']) }}" data-reel-index="{{ loop.index0 }}">
+        <a class="reel-card" href="{{ url_for('review_detail', review_id=review['id']) }}">
           <div class="reel-image">
             <img src="{{ review['image_url'] }}" alt="Poster for {{ review['title'] }}" />
           </div>
@@ -137,39 +137,35 @@
     <p>The Flickly — crafted for the love of cinema.</p>
   </footer>
   <script>
+    const reelTrack = document.querySelector(".reel-track");
     const reelCards = Array.from(document.querySelectorAll(".reel-card"));
     const reelArrows = Array.from(document.querySelectorAll(".reel-arrow"));
-    let reelPage = 0;
     const reelsPerPage = 4;
 
-    const updateReelView = () => {
-      const start = reelPage * reelsPerPage;
-      const end = start + reelsPerPage;
-      reelCards.forEach((card, index) => {
-        card.classList.toggle("is-hidden", index < start || index >= end);
-      });
+    const updateArrows = () => {
+      if (!reelTrack) return;
+      const maxScrollLeft = reelTrack.scrollWidth - reelTrack.clientWidth;
       reelArrows.forEach((arrow) => {
         if (arrow.dataset.direction === "prev") {
-          arrow.disabled = reelPage === 0;
+          arrow.disabled = reelTrack.scrollLeft <= 1;
         } else {
-          arrow.disabled = end >= reelCards.length;
+          arrow.disabled = reelTrack.scrollLeft >= maxScrollLeft - 1;
         }
       });
     };
 
-    if (reelCards.length > reelsPerPage) {
+    if (reelTrack && reelCards.length > reelsPerPage) {
       reelArrows.forEach((arrow) => {
         arrow.addEventListener("click", () => {
-          const maxPage = Math.floor((reelCards.length - 1) / reelsPerPage);
-          if (arrow.dataset.direction === "next") {
-            reelPage = Math.min(reelPage + 1, maxPage);
-          } else {
-            reelPage = Math.max(reelPage - 1, 0);
-          }
-          updateReelView();
+          const direction = arrow.dataset.direction === "next" ? 1 : -1;
+          reelTrack.scrollBy({
+            left: direction * reelTrack.clientWidth,
+            behavior: "smooth",
+          });
         });
       });
-      updateReelView();
+      reelTrack.addEventListener("scroll", updateArrows, { passive: true });
+      updateArrows();
     } else {
       reelArrows.forEach((arrow) => {
         arrow.classList.add("is-hidden");
