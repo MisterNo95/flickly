@@ -67,7 +67,7 @@
         {% for review in reviews %}
         <a class="reel-card" href="{{ url_for('review_detail', review_id=review['id']) }}">
           <div class="reel-image">
-            <img src="{{ review['image_url'] or url_for('static', filename='review-fallback.svg') }}" alt="Poster for {{ review['title'] }}" onerror="this.onerror=null;this.src='{{ url_for('static', filename='review-fallback.svg') }}';" />
+            <img src="{{ review['image_url']|image_src or url_for('static', filename='review-fallback.svg') }}" alt="Poster for {{ review['title'] }}" onerror="this.onerror=null;this.src='{{ url_for('static', filename='review-fallback.svg') }}';" />
           </div>
           <div class="reel-top">
             <span class="rating">{{ review['score_overall'] }}</span>

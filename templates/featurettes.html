@@ -36,7 +36,7 @@
         {% for featurette in featurettes %}
         <a class="featurette-card" href="{{ url_for('featurette_detail', featurette_id=featurette['id']) }}">
           <div class="featurette-image">
-            <img src="{{ featurette['image_url'] }}" alt="Artwork for {{ featurette['title'] }}" />
+            <img src="{{ featurette['image_url']|image_src }}" alt="Artwork for {{ featurette['title'] }}" />
           </div>
           <h3>{{ featurette['title'] }}</h3>
           <p class="featurette-excerpt">{{ featurette['body'][:140] }}...</p>

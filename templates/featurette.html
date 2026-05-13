@@ -33,7 +33,7 @@
           <p class="review-label">Featurette</p>
           <h2>{{ featurette['title'] }}</h2>
         </div>
-        <img src="{{ featurette['image_url'] }}" alt="Artwork for {{ featurette['title'] }}" />
+        <img src="{{ featurette['image_url']|image_src }}" alt="Artwork for {{ featurette['title'] }}" />
       </div>
       <div class="review-body">
         <div class="review-section">

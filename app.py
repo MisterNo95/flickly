@@ -316,9 +316,16 @@ def featurette_tag_set(featurette: sqlite3.Row) -> set[str]:
 
 def normalize_image_path(raw_image: str) -> str:
     image = raw_image.strip()
+    if not image:
+        return ""
     if image.startswith(("http://", "https://", "/")):
         return image
     return f"/img/{Path(image).name}"
+
+
+@app.template_filter("image_src")
+def image_src(raw_image: str) -> str:
+    return normalize_image_path(raw_image or "")
 
 
 def build_tag_catalog(reviews: list[sqlite3.Row], featurettes: list[sqlite3.Row]) -> dict:

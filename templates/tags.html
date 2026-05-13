@@ -43,7 +43,7 @@
             {% for review in filtered_reviews %}
             <a class="reel-card" href="{{ url_for('review_detail', review_id=review['id']) }}">
               <div class="reel-image">
-                <img src="{{ review['image_url'] }}" alt="Poster for {{ review['title'] }}" />
+                <img src="{{ review['image_url']|image_src }}" alt="Poster for {{ review['title'] }}" />
               </div>
               <div class="reel-top">
                 <span class="rating">{{ review['score_overall'] }}</span>
@@ -64,7 +64,7 @@
             {% for featurette in filtered_featurettes %}
             <a class="featurette-card" href="{{ url_for('featurette_detail', featurette_id=featurette['id']) }}">
               <div class="featurette-image">
-                <img src="{{ featurette['image_url'] }}" alt="Artwork for {{ featurette['title'] }}" />
+                <img src="{{ featurette['image_url']|image_src }}" alt="Artwork for {{ featurette['title'] }}" />
               </div>
               <h3>{{ featurette['title'] }}</h3>
             </a>

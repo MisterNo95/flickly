@@ -38,7 +38,7 @@
             <strong>{{ review['score_overall'] }} / 5</strong>
           </div>
         </div>
-        <img src="{{ review['image_url'] or url_for('static', filename='review-fallback.svg') }}" alt="Review art for {{ review['title'] }}" onerror="this.onerror=null;this.src='{{ url_for('static', filename='review-fallback.svg') }}';" />
+        <img src="{{ review['image_url']|image_src or url_for('static', filename='review-fallback.svg') }}" alt="Review art for {{ review['title'] }}" onerror="this.onerror=null;this.src='{{ url_for('static', filename='review-fallback.svg') }}';" />
       </div>
       <div class="review-body">
         <div class="review-section">
