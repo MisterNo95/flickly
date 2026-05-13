@@ -6,11 +6,12 @@ import html
 import re
 from pathlib import Path
 
-from flask import Flask, abort, redirect, render_template, request, url_for
+from flask import Flask, abort, redirect, render_template, request, send_from_directory, url_for
 from urllib.parse import unquote
 from markupsafe import Markup
 
 DB_PATH = Path("reviews.db")
+IMG_PATH = Path("img")
 
 app = Flask(__name__)
 
@@ -313,6 +314,13 @@ def featurette_tag_set(featurette: sqlite3.Row) -> set[str]:
     return {normalize_tag(tag) for tag in parse_tags(featurette["tags"])}
 
 
+def normalize_image_path(raw_image: str) -> str:
+    image = raw_image.strip()
+    if image.startswith(("http://", "https://", "/")):
+        return image
+    return f"/img/{Path(image).name}"
+
+
 def build_tag_catalog(reviews: list[sqlite3.Row], featurettes: list[sqlite3.Row]) -> dict:
     tag_counts: dict[str, int] = {}
     years: dict[str, int] = {}
@@ -500,7 +508,7 @@ def admin() -> str:
         if request.form.get("form_type") == "featurette":
             payload = {
                 "title": request.form["title"].strip(),
-                "image_url": request.form["image_url"].strip(),
+                "image_url": normalize_image_path(request.form["image_url"]),
                 "body": request.form["body"].strip(),
                 "tags": request.form["tags"].replace("/", ",").strip(),
                 "created_at": datetime.utcnow().isoformat(),
@@ -534,7 +542,7 @@ def admin() -> str:
             "length": int(request.form["length"]),
             "genre": request.form["genre"].strip(),
             "year": int(request.form["year"]),
-            "image_url": request.form["image_url"].strip(),
+            "image_url": normalize_image_path(request.form["image_url"]),
             "score_overall": float(request.form["score_overall"]),
             "review_title": request.form["review_title"].strip(),
             "review_body": request.form["review_body"].strip(),
@@ -586,6 +594,11 @@ def admin() -> str:
         connection.close()
         return redirect(url_for("review_detail", review_id=review_id))
     return render_template("admin.html")
+
+
+@app.route("/img/<path:filename>")
+def uploaded_image(filename: str):
+    return send_from_directory(IMG_PATH, filename)
 
 
 init_db()
