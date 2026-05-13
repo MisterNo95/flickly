@@ -258,6 +258,18 @@ a {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.reviews-grid .reel-image,
+.featurette-grid .featurette-image {
+  aspect-ratio: 800 / 536;
+  background: rgba(12, 11, 16, 0.45);
+}
+
+.reviews-grid .reel-image img,
+.featurette-grid .featurette-image img {
+  height: 100%;
+  object-fit: contain;
+}
+
 .reel-card {
   display: block;
   background: var(--velvet);
