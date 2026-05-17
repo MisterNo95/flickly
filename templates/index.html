@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Flickly</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body>
+  <header class="hero">
+    <nav class="nav">
+      <a class="logo" href="{{ url_for('home') }}">The Flickly</a>
+      <div class="nav-links">
+        <a href="{{ url_for('reviews') }}">All Reviews</a>
+        <a href="{{ url_for('featurettes') }}">Featurettes</a>
+        <a href="{{ url_for('updates') }}">Updates</a>
+        <a href="{{ url_for('tags') }}">Tags</a>
+        <a href="{{ url_for('about') }}">About The Flickly</a>
+        <a href="{{ url_for('admin') }}">Admin</a>
+      </div>
+    </nav>
+    <div class="hero-content">
+      <p class="tagline">Cinema glow. Real talk. Honest reels.</p>
+      <h1>Movie reviews framed like the silver screen.</h1>
+      <p class="subtitle">A theatre-inspired space where every verdict feels like a premiere night.</p>
+      <a class="cta" href="{{ url_for('home') }}#reviews">Read the latest reel</a>
+    </div>
+    <div class="marquee">
+      <span>NOW SHOWING • CURATED REVIEWS • POPCORN READY •</span>
+      <span>NOW SHOWING • CURATED REVIEWS • POPCORN READY •</span>
+    </div>
+  </header>
+
+  <main>
+    <section id="features" class="section">
+      <div class="section-title">
+        <h2>Built for cinema lovers</h2>
+        <p>Warm velvet tones, classic marquee accents, and film-strip layouts that echo the theatre.</p>
+      </div>
+      <div class="feature-grid">
+        <a class="feature-card" href="{{ url_for('featurettes') }}">
+          <h3>Featurettes</h3>
+          <p>Long-form essays and deep dives on cinema craft, themes, and history.</p>
+        </a>
+        <a class="feature-card" href="{{ url_for('updates') }}">
+          <h3>Lobby notes</h3>
+          <p>Short updates, quick rants, and theatre-lobby observations.</p>
+        </a>
+        <a class="feature-card" href="{{ url_for('home') }}#reviews">
+          <h3>Feature reels</h3>
+          <p>Review cards with scores, posters, and full write-ups.</p>
+        </a>
+      </div>
+    </section>
+
+    <section id="reviews" class="section reviews">
+      <div class="section-title">
+        <h2>Feature reels</h2>
+        <p>Proof the projector is on—real entries glowing with review detail. Tap a card to open the full page.</p>
+      </div>
+      <div class="reel-carousel">
+        <button class="reel-arrow" type="button" data-direction="prev" aria-label="View previous reviews">
+          &#8592;
+        </button>
+        <div class="reel-grid reel-track" aria-live="polite">
+        {% if reviews %}
+        {% for review in reviews %}
+        <a class="reel-card" href="{{ url_for('review_detail', review_id=review['id']) }}">
+          <div class="reel-image">
+            <img src="{{ review['image_url']|image_src or url_for('static', filename='review-fallback.svg') }}" alt="Poster for {{ review['title'] }}" onerror="this.onerror=null;this.src='{{ url_for('static', filename='review-fallback.svg') }}';" />
+          </div>
+          <div class="reel-top">
+            <span class="rating">{{ review['score_overall'] }}</span>
+            <span class="label">{{ review['review_title'] }}</span>
+          </div>
+          <h3>{{ review['title'] }}</h3>
+          <p class="meta">{{ review['genre'] }} • {{ review['length'] }} min • Director: {{ review['director'] }}</p>
+          <p class="review">{{ review['review_body'][:150] }}...</p>
+          <div class="reel-footer">
+            <span>Cinematography: {{ review['score_cinematography'] }}⭐</span>
+            <span>Story: {{ review['score_story'] }}⭐</span>
+          </div>
+          {% if loop.last %}
+          <div class="reel-cta">Go to last review</div>
+          {% endif %}
+        </a>
+        {% endfor %}
+        {% else %}
+        <div class="reel-card">
+          <div class="reel-top">
+            <span class="rating">0.0</span>
+            <span class="label">No reviews yet</span>
+          </div>
+          <h3>Add your first review</h3>
+          <p class="meta">Use the admin page to publish a review entry.</p>
+          <p class="review">Once you submit the form, your review cards will appear here automatically.</p>
+          <div class="reel-footer">
+            <span>Admin: ready</span>
+            <span>Database: ready</span>
+          </div>
+        </div>
+        {% endif %}
+        </div>
+        <button class="reel-arrow" type="button" data-direction="next" aria-label="View next reviews">
+          &#8594;
+        </button>
+      </div>
+      <div class="see-more">
+        <a class="cta" href="{{ url_for('reviews') }}">See more reviews</a>
+      </div>
+    </section>
+
+    <section id="now-showing" class="section now-showing">
+      <div class="section-title">
+        <h2>Now showing</h2>
+        <p>Quick thoughts and updates—short takes like a theatre lobby feed.</p>
+      </div>
+      <div class="updates-grid">
+        {% for update in updates %}
+        <div class="update-card">
+          <span class="update-label">{{ update['note_type'] }}</span>
+          <h4>{{ update['title'] }}</h4>
+          <p>{{ update['body'] }}</p>
+          {% if update['note_date'] %}
+          <span class="update-date">{{ update['note_date'] }}</span>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      <div class="see-more">
+        <a class="cta" href="{{ url_for('updates') }}">See all lobby notes</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>The Flickly — crafted for the love of cinema.</p>
+  </footer>
+  <script>
+    const reelTrack = document.querySelector(".reel-track");
+    const reelCards = Array.from(document.querySelectorAll(".reel-card"));
+    const reelArrows = Array.from(document.querySelectorAll(".reel-arrow"));
+    const reelsPerPage = 4;
+
+    const updateArrows = () => {
+      if (!reelTrack) return;
+      const maxScrollLeft = reelTrack.scrollWidth - reelTrack.clientWidth;
+      reelArrows.forEach((arrow) => {
+        if (arrow.dataset.direction === "prev") {
+          arrow.disabled = reelTrack.scrollLeft <= 1;
+        } else {
+          arrow.disabled = reelTrack.scrollLeft >= maxScrollLeft - 1;
+        }
+      });
+    };
+
+    if (reelTrack && reelCards.length > reelsPerPage) {
+      reelArrows.forEach((arrow) => {
+        arrow.addEventListener("click", () => {
+          const direction = arrow.dataset.direction === "next" ? 1 : -1;
+          reelTrack.scrollBy({
+            left: direction * reelTrack.clientWidth,
+            behavior: "smooth",
+          });
+        });
+      });
+      reelTrack.addEventListener("scroll", updateArrows, { passive: true });
+      updateArrows();
+    } else {
+      reelArrows.forEach((arrow) => {
+        arrow.classList.add("is-hidden");
+      });
+    }
+  </script>
+</body>
+</html>

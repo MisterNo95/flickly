@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Flickly • About</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body>
+  <header class="hero hero-inner">
+    <nav class="nav">
+      <a class="logo" href="{{ url_for('home') }}">The Flickly</a>
+      <div class="nav-links">
+        <a href="{{ url_for('reviews') }}">All Reviews</a>
+        <a href="{{ url_for('featurettes') }}">Featurettes</a>
+        <a href="{{ url_for('updates') }}">Updates</a>
+        <a href="{{ url_for('tags') }}">Tags</a>
+        <a href="{{ url_for('about') }}">About The Flickly</a>
+        <a href="{{ url_for('admin') }}">Admin</a>
+      </div>
+    </nav>
+    <div class="hero-content">
+      <p class="tagline">About</p>
+      <h1>Welcome to The Flickly.</h1>
+      <p class="subtitle">A theatre-inspired corner for reviews, featurettes, and lobby notes.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="section about">
+      <div class="section-title">
+        <h2>What you’ll find here</h2>
+        <p>The Flickly is built for movie lovers who want both quick reactions and deep dives.</p>
+      </div>
+      <div class="feature-grid">
+        <article>
+          <h3>Feature reels</h3>
+          <p>Full reviews with scores, posters, and structured verdicts.</p>
+        </article>
+        <article>
+          <h3>Featurettes</h3>
+          <p>Long-form essays that explore themes, craft, and cinema history.</p>
+        </article>
+        <article>
+          <h3>Lobby notes</h3>
+          <p>Quick updates, rants, and short thoughts straight from the lobby.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section about-highlight">
+      <div class="about-panel">
+        <h2>Our mission</h2>
+        <p>We celebrate cinema with the same care as a premiere night. From crisp, structured reviews to thoughtful essays and lobby notes, The Flickly keeps the projector running on curiosity, craft, and community.</p>
+      </div>
+    </section>
+
+    <section class="section about-highlight">
+      <div class="about-panel about-panel-slim">
+        <h2>Where The Flickly hangs out</h2>
+        <p>Keep the projector roll going—follow along for ratings, watchlists, and short reactions outside the site.</p>
+        <div class="about-socials">
+          <a class="social-card" href="https://x.com/theflickly" target="_blank" rel="noreferrer">
+            <span class="social-icon social-icon-x">X</span>
+            <div>
+              <h3>@theflickly</h3>
+              <p>Quick updates, reactions, and theatre lobby chatter.</p>
+            </div>
+          </a>
+          <a class="social-card" href="https://letterboxd.com/helizzes/" target="_blank" rel="noreferrer">
+            <span class="social-icon social-icon-letterboxd">LB</span>
+            <div>
+              <h3>Letterboxd</h3>
+              <p>Ratings, rewatches, and a running diary of films.</p>
+            </div>
+          </a>
+          <a class="social-card" href="https://www.serializd.com/user/helizzes" target="_blank" rel="noreferrer">
+            <span class="social-icon social-icon-serializd">SZ</span>
+            <div>
+              <h3>Serializd</h3>
+              <p>Series tracking, episode notes, and screen-time stats.</p>
+            </div>
+          </a>
+        </div>
+        <div class="about-links">
+          <a class="tag-link" href="{{ url_for('reviews') }}">Browse reviews</a>
+          <a class="tag-link" href="{{ url_for('featurettes') }}">Read featurettes</a>
+          <a class="tag-link" href="{{ url_for('updates') }}">Lobby notes archive</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>The Flickly — crafted for the love of cinema.</p>
+  </footer>
+</body>
+</html>

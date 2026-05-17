@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+reviews.db
+reviews.db-shm
+reviews.db-wal

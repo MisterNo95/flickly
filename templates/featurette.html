@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Flickly • Featurette</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body>
+  <header class="hero hero-inner">
+    <nav class="nav">
+      <a class="logo" href="{{ url_for('home') }}">The Flickly</a>
+      <div class="nav-links">
+        <a href="{{ url_for('reviews') }}">All Reviews</a>
+        <a href="{{ url_for('featurettes') }}">Featurettes</a>
+        <a href="{{ url_for('updates') }}">Updates</a>
+        <a href="{{ url_for('tags') }}">Tags</a>
+        <a href="{{ url_for('about') }}">About The Flickly</a>
+        <a href="{{ url_for('admin') }}">Admin</a>
+      </div>
+    </nav>
+    <div class="hero-content">
+      <p class="tagline">Featurette</p>
+      <h1>{{ featurette['title'] }}</h1>
+      <p class="subtitle">A long-form cinema essay.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="section review-page featurette-page">
+      <div class="review-hero">
+        <div>
+          <p class="review-label">Featurette</p>
+          <h2>{{ featurette['title'] }}</h2>
+        </div>
+        <img src="{{ featurette['image_url']|image_src }}" alt="Artwork for {{ featurette['title'] }}" />
+      </div>
+      <div class="review-body">
+        <div class="review-section">
+          <p class="review-text">{{ formatted_body }}</p>
+        </div>
+      </div>
+      <div class="review-meta">
+        <div>
+          <h4>Tags</h4>
+          <div class="tag-row">
+            {% for tag in featurette['tags'].split(',') %}
+            <a class="tag-link" href="{{ url_for('tag_filter', tag=tag.strip()) }}">{{ tag.strip() }}</a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>The Flickly — featurettes, essays, and deep dives.</p>
+  </footer>
+</body>
+</html>

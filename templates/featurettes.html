@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Flickly • Featurettes</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body>
+  <header class="hero hero-inner">
+    <nav class="nav">
+      <a class="logo" href="{{ url_for('home') }}">The Flickly</a>
+      <div class="nav-links">
+        <a href="{{ url_for('reviews') }}">All Reviews</a>
+        <a href="{{ url_for('featurettes') }}">Featurettes</a>
+        <a href="{{ url_for('updates') }}">Updates</a>
+        <a href="{{ url_for('tags') }}">Tags</a>
+        <a href="{{ url_for('about') }}">About The Flickly</a>
+        <a href="{{ url_for('admin') }}">Admin</a>
+      </div>
+    </nav>
+    <div class="hero-content">
+      <p class="tagline">Featurettes</p>
+      <h1>Long-form cinema essays.</h1>
+      <p class="subtitle">Deep dives and thematic explorations, curated like a festival program.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="section featurettes">
+      <div class="section-title">
+        <h2>Latest featurettes</h2>
+        <p>Tap any featurette to read the full piece.</p>
+      </div>
+      <div class="featurette-grid">
+        {% for featurette in featurettes %}
+        <a class="featurette-card" href="{{ url_for('featurette_detail', featurette_id=featurette['id']) }}">
+          <div class="featurette-image">
+            <img src="{{ featurette['image_url']|image_src }}" alt="Artwork for {{ featurette['title'] }}" />
+          </div>
+          <h3>{{ featurette['title'] }}</h3>
+          <p class="featurette-excerpt">{{ featurette['body'][:140] }}...</p>
+        </a>
+        {% endfor %}
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>The Flickly — featurettes, essays, and deep dives.</p>
+  </footer>
+</body>
+</html>

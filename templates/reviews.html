@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Flickly • All Reviews</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body>
+  <header class="hero hero-inner">
+    <nav class="nav">
+      <a class="logo" href="{{ url_for('home') }}">The Flickly</a>
+      <div class="nav-links">
+        <a href="{{ url_for('reviews') }}">All Reviews</a>
+        <a href="{{ url_for('featurettes') }}">Featurettes</a>
+        <a href="{{ url_for('updates') }}">Updates</a>
+        <a href="{{ url_for('tags') }}">Tags</a>
+        <a href="{{ url_for('about') }}">About The Flickly</a>
+        <a href="{{ url_for('admin') }}">Admin</a>
+      </div>
+    </nav>
+    <div class="hero-content">
+      <p class="tagline">All reviews</p>
+      <h1>The full archive.</h1>
+      <p class="subtitle">Browse every review with scores, artwork, and quick notes.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="section reviews">
+      <div class="section-title">
+        <h2>Review archive</h2>
+        <p>Every entry in one place. Tap any reel for the full review.</p>
+      </div>
+      <div class="reel-grid reviews-grid">
+        {% for review in reviews %}
+        <a class="reel-card" href="{{ url_for('review_detail', review_id=review['id']) }}">
+          <div class="reel-image">
+            <img src="{{ review['image_url']|image_src or url_for('static', filename='review-fallback.svg') }}" alt="Poster for {{ review['title'] }}" onerror="this.onerror=null;this.src='{{ url_for('static', filename='review-fallback.svg') }}';" />
+          </div>
+          <div class="reel-top">
+            <span class="rating">{{ review['score_overall'] }}</span>
+            <span class="label">{{ review['review_title'] }}</span>
+          </div>
+          <h3>{{ review['title'] }}</h3>
+          <p class="meta">{{ review['genre'] }} • {{ review['length'] }} min • {{ review['year'] }}</p>
+          <p class="review">{{ review['review_body'][:160] }}...</p>
+          <div class="reel-footer">
+            <span>Cinematography: {{ review['score_cinematography'] }}⭐</span>
+            <span>Story: {{ review['score_story'] }}⭐</span>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+      {% if total_pages > 1 %}
+      <div class="pagination">
+        {% if page > 1 %}
+        <a class="cta" href="{{ url_for('reviews', page=page-1) }}">Previous</a>
+        {% endif %}
+        <span>Page {{ page }} of {{ total_pages }}</span>
+        {% if page < total_pages %}
+        <a class="cta" href="{{ url_for('reviews', page=page+1) }}">Next</a>
+        {% endif %}
+      </div>
+      {% endif %}
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>The Flickly — every review in the archive.</p>
+  </footer>
+</body>
+</html>

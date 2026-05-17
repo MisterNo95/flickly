@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Flickly • Tags</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body>
+  <header class="hero hero-inner">
+    <nav class="nav">
+      <a class="logo" href="{{ url_for('home') }}">The Flickly</a>
+      <div class="nav-links">
+        <a href="{{ url_for('reviews') }}">All Reviews</a>
+        <a href="{{ url_for('featurettes') }}">Featurettes</a>
+        <a href="{{ url_for('updates') }}">Updates</a>
+        <a href="{{ url_for('tags') }}">Tags</a>
+        <a href="{{ url_for('about') }}">About The Flickly</a>
+        <a href="{{ url_for('admin') }}">Admin</a>
+      </div>
+    </nav>
+    <div class="hero-content">
+      <p class="tagline">Tags & filters</p>
+      <h1>Browse reviews by mood, year, and origin.</h1>
+      <p class="subtitle">Jump between tags to explore cinema by era, country, or format.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="section tags">
+      <div class="section-title">
+        <h2>Explore by tag</h2>
+        <p>These groupings can grow as you add more reviews. Each card highlights a different path into the archive.</p>
+      </div>
+      {% if selected_tag %}
+      <div class="tag-results">
+        <h3>Showing results for “{{ selected_tag }}”</h3>
+        <p><a class="tag-link" href="{{ url_for('tags') }}">Clear filter</a></p>
+        {% if filtered_reviews %}
+        <div class="tag-section">
+          <h4>Reviews</h4>
+          <div class="reel-grid">
+            {% for review in filtered_reviews %}
+            <a class="reel-card" href="{{ url_for('review_detail', review_id=review['id']) }}">
+              <div class="reel-image">
+                <img src="{{ review['image_url']|image_src }}" alt="Poster for {{ review['title'] }}" />
+              </div>
+              <div class="reel-top">
+                <span class="rating">{{ review['score_overall'] }}</span>
+                <span class="label">{{ review['review_title'] }}</span>
+              </div>
+              <h3>{{ review['title'] }}</h3>
+              <p class="meta">{{ review['genre'] }} • {{ review['length'] }} min • {{ review['year'] }}</p>
+              <p class="review">{{ review['review_body'][:160] }}...</p>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+        {% if filtered_featurettes %}
+        <div class="tag-section">
+          <h4>Featurettes</h4>
+          <div class="featurette-grid">
+            {% for featurette in filtered_featurettes %}
+            <a class="featurette-card" href="{{ url_for('featurette_detail', featurette_id=featurette['id']) }}">
+              <div class="featurette-image">
+                <img src="{{ featurette['image_url']|image_src }}" alt="Artwork for {{ featurette['title'] }}" />
+              </div>
+              <h3>{{ featurette['title'] }}</h3>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+      <div class="tag-grid">
+        <article id="matinee" class="tag-card">
+          <h3>Matinee Spotlight</h3>
+          <p>Bright, hopeful stories for daytime viewing.</p>
+          <div class="tag-row">
+            <a class="tag-link" href="{{ url_for('tag_filter', tag='2024') }}">2024</a>
+            <a class="tag-link" href="{{ url_for('tag_filter', tag='Movie') }}">Movie</a>
+            <a class="tag-link" href="{{ url_for('tag_filter', tag='Feel-good') }}">Feel-good</a>
+          </div>
+        </article>
+        <article id="prime-time" class="tag-card">
+          <h3>Prime Time Thrills</h3>
+          <p>Blockbusters, high energy, and big-screen spectacle.</p>
+          <div class="tag-row">
+            <a class="tag-link" href="{{ url_for('tag_filter', tag='Series') }}">Series</a>
+            <a class="tag-link" href="{{ url_for('tag_filter', tag='Action') }}">Action</a>
+            <a class="tag-link" href="{{ url_for('tag_filter', tag='USA') }}">USA</a>
+          </div>
+        </article>
+        <article id="after-dark" class="tag-card">
+          <h3>After Dark Classics</h3>
+          <p>Noir, mystery, and slow-burn cinema.</p>
+          <div class="tag-row">
+            <a class="tag-link" href="{{ url_for('tag_filter', tag='Classic') }}">Classic</a>
+            <a class="tag-link" href="{{ url_for('tag_filter', tag='Noir') }}">Noir</a>
+            <a class="tag-link" href="{{ url_for('tag_filter', tag='France') }}">France</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">
+        <h2>Tag directory</h2>
+        <p>Use this as a quick index. As you add reviews, link them to these tags.</p>
+      </div>
+      <div class="directory">
+        <div>
+          <h4>All tags</h4>
+          <p>
+            {% for tag, count in all_tags.items() %}
+            <a class="inline-tag" href="{{ url_for('tag_filter', tag=tag) }}">{{ tag }} ({{ count }})</a>
+            {% endfor %}
+          </p>
+        </div>
+        <div>
+          <h4>Years</h4>
+          <p>
+            {% for year, count in years.items() %}
+            <a class="inline-tag" href="{{ url_for('tag_filter', tag=year) }}">{{ year }} ({{ count }})</a>
+            {% endfor %}
+          </p>
+        </div>
+        <div>
+          <h4>Genres</h4>
+          <p>
+            {% for genre, count in genres.items() %}
+            <a class="inline-tag" href="{{ url_for('tag_filter', tag=genre) }}">{{ genre }} ({{ count }})</a>
+            {% endfor %}
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>The Flickly — find your next watch by tag.</p>
+  </footer>
+</body>
+</html>

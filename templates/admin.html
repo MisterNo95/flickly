@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Flickly • Admin</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body>
+  <header class="hero hero-inner">
+    <nav class="nav">
+      <a class="logo" href="{{ url_for('home') }}">The Flickly</a>
+      <div class="nav-links">
+        <a href="{{ url_for('reviews') }}">All Reviews</a>
+        <a href="{{ url_for('featurettes') }}">Featurettes</a>
+        <a href="{{ url_for('updates') }}">Updates</a>
+        <a href="{{ url_for('tags') }}">Tags</a>
+        <a href="{{ url_for('about') }}">About The Flickly</a>
+        <a href="{{ url_for('admin') }}">Admin</a>
+      </div>
+    </nav>
+    <div class="hero-content">
+      <p class="tagline">Admin</p>
+      <h1>Add a new review.</h1>
+      <p class="subtitle">Fill out the form below to publish a new review straight to the homepage and detail page.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="section admin">
+      <form class="review-form" method="post" action="{{ url_for('admin') }}">
+        <input type="hidden" name="form_type" value="review" />
+        <div class="form-grid">
+          <label>
+            Title
+            <input type="text" name="title" required />
+          </label>
+          <label>
+            Director
+            <input type="text" name="director" required />
+          </label>
+          <label>
+            Length (minutes)
+            <input type="number" name="length" min="1" required />
+          </label>
+          <label>
+            Genre
+            <input type="text" name="genre" required />
+          </label>
+          <label>
+            Year
+            <input type="number" name="year" min="1900" max="2100" required />
+          </label>
+          <label>
+            Image filename only (from /img)
+            <input type="text" name="image_url" placeholder="studio.png" required />
+          </label>
+          <label>
+            Score out of 5
+            <input type="number" name="score_overall" min="0" max="5" step="0.1" required />
+          </label>
+          <label>
+            Review title
+            <input type="text" name="review_title" required />
+          </label>
+        </div>
+
+        <label class="full-width">
+          Review body
+          <textarea name="review_body" rows="6" required></textarea>
+          <span class="form-hint">Use line breaks freely. Markdown: **bold**, *italic*, __underline__.</span>
+        </label>
+
+        <div class="form-grid">
+          <label>
+            Tags (comma-separated)
+            <input type="text" name="tags" placeholder="Noir, Thriller, USA" required />
+          </label>
+          <label>
+            Cinematography (stars)
+            <input type="number" name="score_cinematography" min="0" max="5" step="0.5" required />
+          </label>
+          <label>
+            Acting (stars)
+            <input type="number" name="score_acting" min="0" max="5" step="0.5" required />
+          </label>
+          <label>
+            Story/Screenplay (stars)
+            <input type="number" name="score_story" min="0" max="5" step="0.5" required />
+          </label>
+        </div>
+
+        <button class="cta" type="submit">Publish review</button>
+      </form>
+
+      <div class="admin-divider"></div>
+
+      <form class="review-form" method="post" action="{{ url_for('admin') }}">
+        <input type="hidden" name="form_type" value="featurette" />
+        <h3>Featurette</h3>
+        <p class="form-hint">Long-form essays without director or runtime details.</p>
+        <div class="form-grid">
+          <label>
+            Title
+            <input type="text" name="title" required />
+          </label>
+          <label>
+            Image filename only (from /img)
+            <input type="text" name="image_url" placeholder="studio.png" required />
+          </label>
+          <label>
+            Tags (comma-separated)
+            <input type="text" name="tags" placeholder="Analysis, Themes, Lighting" required />
+          </label>
+        </div>
+        <label class="full-width">
+          Featurette body
+          <textarea name="body" rows="6" required></textarea>
+          <span class="form-hint">Use line breaks freely. Markdown: **bold**, *italic*, __underline__, ## heading.</span>
+        </label>
+        <button class="cta" type="submit">Publish featurette</button>
+      </form>
+
+      <div class="admin-divider"></div>
+
+      <form class="review-form" method="post" action="{{ url_for('admin') }}">
+        <input type="hidden" name="form_type" value="update" />
+        <h3>Lobby updates</h3>
+        <p class="form-hint">Post short, Twitter-style updates for the “Now showing” feed.</p>
+        <div class="form-grid">
+          <label>
+            Title
+            <input type="text" name="title" required />
+          </label>
+          <label>
+            Type of note
+            <input type="text" name="note_type" placeholder="Editorial, Quick rant" required />
+          </label>
+          <label>
+            Date
+            <input type="text" name="note_date" placeholder="Aug 22, 2024" required />
+          </label>
+        </div>
+        <label class="full-width">
+          Note body
+          <textarea name="body" rows="4" required></textarea>
+        </label>
+        <button class="cta" type="submit">Publish update</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>The Flickly — admin entry portal.</p>
+  </footer>
+</body>
+</html>
